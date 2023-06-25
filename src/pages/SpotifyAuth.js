@@ -15,9 +15,8 @@ export const SpotifyAuthPage = () => {
         (async () => {
             const queue = await createQueue(context.visitorId, spotifyAccessToken);
             if (!queue || !queue.code) {
-                // TODO: Error out.
                 navigate('/');
-                return;
+                return;  // TODO: Display error.
             }
             navigate(`/queue/${queue.code}`);
         })();
