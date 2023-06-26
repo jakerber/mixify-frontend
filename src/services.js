@@ -1,4 +1,4 @@
-const API_URL_BASE = 'https://mixify-backend-tm7l73z2zq-uk.a.run.app';
+const API_URL_BASE = process.env.REACT_APP_API_URL;
 
 const exec_request = async (url) => {
     return fetch(url)
