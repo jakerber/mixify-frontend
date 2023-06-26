@@ -6,7 +6,7 @@ export const HomePage = () => {
     const navigate = useNavigate();
     const [queueCode, setQueueCode] = useState('');
     let spotifyAuthUrl = `https://accounts.spotify.com/authorize?`;
-    spotifyAuthUrl += `client_id=a4ecbf8a741d49fcaa750f25f6ed1486`;
+    spotifyAuthUrl += `client_id=${process.env.REACT_APP_SPOTIFY_CLIENT_ID}`;
     spotifyAuthUrl += `&redirect_uri=${process.env.REACT_APP_SPOTIFY_REDIRECT_URI}`;
     spotifyAuthUrl += `&response_type=token&show_dialogue=true`;
     spotifyAuthUrl += `&scope=user-modify-playback-state%20`
