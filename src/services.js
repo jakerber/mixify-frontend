@@ -24,3 +24,11 @@ export const queueDrakeForever = async (visitorId, queueId) => {
 export const upvoteTrack = async (visitorId, queueTrackId) => {
     return exec_request(`${API_URL_BASE}/v1/queue/upvote/${visitorId}/${queueTrackId}`);
 };
+
+export const searchTracks = async (queueId, searchQuery) => {
+    return exec_request(`${API_URL_BASE}/v1/search/${queueId}/${searchQuery}`);
+};
+
+export const addTrackToQueue = async (queueId, visitorId, trackId) => {
+    return exec_request(`${API_URL_BASE}/v1/queue/add/${queueId}/${visitorId}/${trackId}`);
+};

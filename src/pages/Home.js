@@ -22,7 +22,7 @@ export const HomePage = () => {
                     value={queueCode}
                     onChange={(event) => setQueueCode(event.target.value)}
                 />
-                <br />
+                &nbsp;
                 <button type="button" onClick={() => navigate(`/queue/${queueCode}`)}>Join</button>
             </form>
             <br />
