@@ -1,34 +1,51 @@
 const API_URL_BASE = process.env.REACT_APP_API_URL;
 
-const exec_request = async (url) => {
+const execRequest = async (url) => {
     return fetch(url)
         .then(response => response.json())
+        .then(response => {
+            if (!response.hasOwnProperty('error_message')) return response;
+            throw Error(JSON.stringify(response, null, ' '));
+        })
         .catch(error => {
-            console.log(error);
-            return null;
+            throw Error(error);
         });
 }
 
-export const fetchQueue = async (code) => {
-    return exec_request(`${API_URL_BASE}/v1/queue/${code}`);
+export const QUEUE_NOT_FOUND_ERROR_MSG = 'queue not found';
+
+export const fetchQueue = async (queueName) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/${queueName}`);
 };
 
-export const createQueue = async (visitorId, accessToken) => {
-    return exec_request(`${API_URL_BASE}/v1/queue/${visitorId}/${accessToken}`);
+export const createQueue = async (spotifyAccessToken, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/new/${spotifyAccessToken}/${fpjsVisitorId}`);
 };
 
-export const queueDrakeForever = async (visitorId, queueId) => {
-    return exec_request(`${API_URL_BASE}/v1/queue/${visitorId}/${queueId}/drake/forever`);
+export const upvoteSong = async (queueTrackId, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/upvote/${queueTrackId}/${fpjsVisitorId}`);
 };
 
-export const upvoteTrack = async (visitorId, queueTrackId) => {
-    return exec_request(`${API_URL_BASE}/v1/queue/upvote/${visitorId}/${queueTrackId}`);
+export const removeSongUpvote = async (queueTrackId, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/upvote/remove/${queueTrackId}/${fpjsVisitorId}`);
 };
 
-export const searchTracks = async (queueId, searchQuery) => {
-    return exec_request(`${API_URL_BASE}/v1/search/${queueId}/${searchQuery}`);
+export const searchForSong = async (queueId, searchQuery) => {
+    return execRequest(`${API_URL_BASE}/v1/search/${queueId}/${searchQuery}`);
 };
 
-export const addTrackToQueue = async (queueId, visitorId, trackId) => {
-    return exec_request(`${API_URL_BASE}/v1/queue/add/${queueId}/${visitorId}/${trackId}`);
+export const addSongToQueue = async (queueId, spotifyTrackId, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/add/${queueId}/${spotifyTrackId}/${fpjsVisitorId}`);
+};
+
+export const endQueue = async (queueId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/end/${queueId}`);
+};
+
+export const pauseQueue = async (queueId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/pause/${queueId}`);
+};
+
+export const unpauseQueue = async (queueId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/unpause/${queueId}`);
 };

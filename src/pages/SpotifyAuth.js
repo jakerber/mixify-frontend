@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import { createQueue } from '../services';
+import { Paper, Center, Stack, Text, Loader } from '@mantine/core';
 
 export const SpotifyAuthPage = () => {
     const context = useOutletContext();
@@ -13,18 +14,29 @@ export const SpotifyAuthPage = () => {
     useEffect(() => {
         if (!context.visitorId) return;
         (async () => {
-            const queue = await createQueue(context.visitorId, spotifyAccessToken);
-            if (!queue || !queue.code) {
+            const queue = await createQueue(spotifyAccessToken, context.visitorId);
+            if (!queue || !queue.name) {
                 navigate('/');
                 return;  // TODO: Display error.
             }
-            navigate(`/queue/${queue.code}`);
+            navigate(`/queue/${queue.name}`);
         })();
     }, [context.visitorId]);
 
     return (
-        <div>
-            <h1>{`${spotifyAccessToken}`}</h1>
-        </div>
+        <Paper
+            shadow='xs'
+            p='sm'
+            sx={{ backgroundColor: '#2b2c3d' }}
+            withBorder
+            m={20}
+        >
+            <Center>
+                <Stack align='center' spacing={10}>
+                    <Text size='sm'>Authenticating user</Text>
+                    <Loader />
+                </Stack>
+            </Center>
+        </Paper>
     );
 };
