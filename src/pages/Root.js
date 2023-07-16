@@ -33,10 +33,10 @@ export const RootPage = () => {
                     <Group
                         sx={{ cursor: 'pointer' }}
                         onClick={() => navigate('/')}
-                        spacing={5}
+                        spacing={8}
                     >
                         <Image src={mixifyLogoZoom} radius='md' width={45} />
-                        <Title order={3}>Mixify</Title>
+                        <Title order={2}>Mixify</Title>
                     </Group>
                     <Popover width={200} position='bottom-end' withArrow>
                         <Popover.Target>
