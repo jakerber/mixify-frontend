@@ -34,21 +34,23 @@ export const QueuePage = () => {
 
     const [anotherQueueName, setAnotherQueueName] = useState('');
 
+    const fetchAndLoadQueue = async () => {
+        try {
+            setQueue(await fetchQueue(queueName));
+        } catch (error) {
+            setQueueError(error.message);
+        } finally {
+            setQueueLoaded(true);
+        }
+    };
+
     useEffect(() => {
         if (!queueName) {
             navigate('/');
             return;
         }
 
-        (async () => {
-            try {
-                setQueue(await fetchQueue(queueName));
-            } catch (error) {
-                setQueueError(error.message);
-            } finally {
-                setQueueLoaded(true);
-            }
-        })();
+        fetchAndLoadQueue();
     }, [queueName]);
 
     useEffect(() => {
@@ -65,66 +67,65 @@ export const QueuePage = () => {
     return queueLoaded ? (
         !!queue ? (
             <Stack spacing={3} p={20}>
-                <Group mb={10}>
-                    <Indicator
-                        processing
-                        size={18}
-                        position='top-start'
-                        offset={4}
-                        color='green'
-                        withBorder
-                        disabled={!!queue.paused_on_utc}
-                    >
-                        <Badge size='xl' p={18}>Queue {`${queue.name}`}</Badge>
-                    </Indicator>
-                    {!!queue && queue.started_by_fpjs_visitor_id === context.visitorId && (
-                        <>
-                            <Button
-                                size='sm'
-                                variant={!!queue.paused_on_utc ? `filled` : `outline`}
-                                color='yellow'
-                                radius='xl'
-                                loading={pauseButtonLoading}
-                                onClick={() => {
-                                    setPauseButtonLoading(true);
-                                    (async () => {
-                                        if (!!queue.paused_on_utc) {
-                                            const updatedQueue = await unpauseQueue(queue.id);
-                                            setQueue(updatedQueue);
-                                        } else {
-                                            const updatedQueue = await pauseQueue(queue.id);
-                                            setQueue(updatedQueue);
-                                        }
-                                        setPauseButtonLoading(false);
-                                    })();
-                                }}
-                                leftIcon={<IconPlayerPauseFilled size={20} stroke={1} />}
-                                styles={{ leftIcon: { marginRight: 5 } }}
-                            >
-                                {!!queue.paused_on_utc ? `UNPAUSE` : `PAUSE`}
-                            </Button>
-                            <Button
-                                size='sm'
-                                variant='outline'
-                                color='red'
-                                radius='xl'
-                                loading={endButtonLoading}
-                                onClick={() => {
-                                    setEndButtonLoading(true);
-                                    (async () => {
-                                        await endQueue(queue.id);
-                                        navigate('/');
-                                        setEndButtonLoading(false);
-                                    })();
-                                }}
-                                leftIcon={<IconPlayerStopFilled size={20} stroke={1} />}
-                                styles={{ leftIcon: { marginRight: 5 } }}
-                            >
-                                END
-                            </Button>
-                        </>
-                    )}
-                </Group>
+                <Indicator
+                    processing
+                    size={18}
+                    position='top-start'
+                    offset={4}
+                    color='green'
+                    withBorder
+                    disabled={!!queue.paused_on_utc}
+                    mb={10}
+                >
+                    <Badge size='xl' p={18}>Queue {`${queue.name}`}</Badge>
+                </Indicator>
+                {!!queue && queue.started_by_fpjs_visitor_id === context.visitorId && (
+                    <Group mb={10}>
+                        <Button
+                            size='sm'
+                            variant={!!queue.paused_on_utc ? `filled` : `outline`}
+                            color='yellow'
+                            radius='xl'
+                            loading={pauseButtonLoading}
+                            onClick={() => {
+                                setPauseButtonLoading(true);
+                                (async () => {
+                                    if (!!queue.paused_on_utc) {
+                                        const updatedQueue = await unpauseQueue(queue.id);
+                                        setQueue(updatedQueue);
+                                    } else {
+                                        const updatedQueue = await pauseQueue(queue.id);
+                                        setQueue(updatedQueue);
+                                    }
+                                    setPauseButtonLoading(false);
+                                })();
+                            }}
+                            leftIcon={<IconPlayerPauseFilled size={20} stroke={1} />}
+                            styles={{ leftIcon: { marginRight: 5 } }}
+                        >
+                            {!!queue.paused_on_utc ? `UNPAUSE` : `PAUSE`}
+                        </Button>
+                        <Button
+                            size='sm'
+                            variant='outline'
+                            color='red'
+                            radius='xl'
+                            loading={endButtonLoading}
+                            onClick={() => {
+                                setEndButtonLoading(true);
+                                (async () => {
+                                    await endQueue(queue.id);
+                                    navigate('/');
+                                    setEndButtonLoading(false);
+                                })();
+                            }}
+                            leftIcon={<IconPlayerStopFilled size={20} stroke={1} />}
+                            styles={{ leftIcon: { marginRight: 5 } }}
+                        >
+                            END
+                        </Button>
+                    </Group>
+                )}
                 <Input
                     placeholder='Search music'
                     icon={<IconSearch size={17} stroke={1.5} />}
@@ -167,8 +168,12 @@ export const QueuePage = () => {
                                                         if (!!addingTrackId || alreadyInQueue) return;
                                                         setAddingTrackId(result.track_id);
                                                         (async () => {
-                                                            const newQueue = await addSongToQueue(queue.id, result.track_id, context.visitorId);
-                                                            setQueue(newQueue);
+                                                            try {
+                                                                const newQueue = await addSongToQueue(queue.id, result.track_id, context.visitorId);
+                                                                setQueue(newQueue);
+                                                            } catch (error) {
+                                                                await fetchAndLoadQueue();
+                                                            }
                                                             setAddingTrackId('');
                                                         })();
                                                     }}
@@ -192,7 +197,7 @@ export const QueuePage = () => {
                                                             </Group>
                                                         </div>
                                                     </Group>
-                                                    {alreadyInQueue && (<Badge mr={5}>Added</Badge>)}
+                                                    {alreadyInQueue && (<Badge mr={5} miw={50}>Added</Badge>)}
                                                 </Group>
                                             );
                                         })}
@@ -242,7 +247,7 @@ export const QueuePage = () => {
                                                     <ActionIcon
                                                         size='lg'
                                                         color='yellow'
-                                                        variant='subtle'
+                                                        variant='light'
                                                     >
                                                         <IconLock size={25} stroke={1} />
                                                     </ActionIcon>
@@ -254,8 +259,12 @@ export const QueuePage = () => {
                                                         onClick={() => {
                                                             setUpvotingQueueSongId(song.id);
                                                             (async () => {
-                                                                const newQueue = await removeSongUpvote(song.id, context.visitorId);
-                                                                setQueue(newQueue);
+                                                                try {
+                                                                    const newQueue = await removeSongUpvote(song.id, context.visitorId);
+                                                                    setQueue(newQueue);
+                                                                } catch (error) {
+                                                                    await fetchAndLoadQueue();
+                                                                }
                                                                 setUpvotingQueueSongId('');
                                                             })();
                                                         }}
@@ -274,8 +283,12 @@ export const QueuePage = () => {
                                                         onClick={() => {
                                                             (async () => {
                                                                 setUpvotingQueueSongId(song.id);
-                                                                const newQueue = await upvoteSong(song.id, context.visitorId);
-                                                                setQueue(newQueue);
+                                                                try {
+                                                                    const newQueue = await upvoteSong(song.id, context.visitorId);
+                                                                    setQueue(newQueue);
+                                                                } catch (error) {
+                                                                    await fetchAndLoadQueue();
+                                                                }
                                                                 setUpvotingQueueSongId('');
                                                             })();
                                                         }}

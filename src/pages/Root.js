@@ -37,8 +37,8 @@ export const RootPage = () => {
                     </Group>
                     <Popover width={200} position='bottom' withArrow shadow="md">
                         <Popover.Target>
-                            <Button radius='xl' variant='gradient' h={30} leftIcon={<IconFingerprint size={16} stroke={3} />}>
-                                {!!visitorId ? visitorId.slice(0, 20) : `Loading...`}
+                            <Button radius='xl' variant='gradient' size='sm' h={32} leftIcon={<IconFingerprint size={17} stroke={3} />}>
+                                {!!visitorId ? visitorId.slice(0, 10) : `Loading...`}
                             </Button>
                         </Popover.Target>
                         <Popover.Dropdown>
