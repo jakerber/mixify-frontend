@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { Badge, Button, Container, Header, Group, Title, Popover, Stack, Text, rem, Center, Image } from '@mantine/core';
 import { IconFingerprint } from '@tabler/icons-react';
+import mixifyLogoZoom from '../assets/mixify-logo-zoom.png';
 
 export const RootPage = () => {
     const navigate = useNavigate();
@@ -32,10 +33,12 @@ export const RootPage = () => {
                     <Group
                         sx={{ cursor: 'pointer' }}
                         onClick={() => navigate('/')}
+                        spacing={5}
                     >
-                        <Title>Mixify</Title>
+                        <Image src={mixifyLogoZoom} radius='md' width={45} />
+                        <Title order={3}>Mixify</Title>
                     </Group>
-                    <Popover width={200} position='bottom' withArrow shadow="md">
+                    <Popover width={200} position='bottom-end' withArrow>
                         <Popover.Target>
                             <Button radius='xl' variant='gradient' size='sm' h={32} leftIcon={<IconFingerprint size={17} stroke={3} />}>
                                 {!!visitorId ? visitorId.slice(0, 10) : `Loading...`}

@@ -15,7 +15,7 @@ export const HomePage = () => {
     spotifyAuthUrl += `&scope=user-read-playback-state%2Cuser-modify-playback-state`
 
     return (
-        <Stack align='stretch' p={20}>
+        <Stack align='stretch' p={20} pt={15}>
             <Paper
                 shadow='xs'
                 p='md'

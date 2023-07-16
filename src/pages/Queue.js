@@ -66,7 +66,7 @@ export const QueuePage = () => {
 
     return queueLoaded ? (
         !!queue ? (
-            <Stack spacing={3} p={20}>
+            <Stack spacing={3} p={20} pt={15}>
                 <Indicator
                     processing
                     size={18}
