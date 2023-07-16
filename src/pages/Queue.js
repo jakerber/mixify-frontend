@@ -334,7 +334,7 @@ export const QueuePage = () => {
                         <>
                             {queueError.includes(QUEUE_NOT_FOUND_ERROR_MSG) ? (
                                 <Stack mb={10}>
-                                    <Text size='sm'>{`Hmm, we couldn't find this queue. Try again below.`}</Text>
+                                    <Text size='sm'>{`Hmm, we couldn't find this queue. Try entering the name again below.`}</Text>
                                     <Center>
                                         <PinInput
                                             size='md'
