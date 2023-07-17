@@ -48,7 +48,7 @@ export const RootPage = () => {
                             <Stack spacing={5} mb={2}>
                                 <Title order={5}>Your activity</Title>
                                 <Center h={30}>
-                                    <Badge size='xs' variant='outline' color='green' opacity={0.85} mt={2}>Coming Soon</Badge>
+                                    <Badge size='xs' variant='outline' color='green' opacity={0.9} mt={2}>Coming Soon</Badge>
                                 </Center>
                             </Stack>
                         </Popover.Dropdown>
