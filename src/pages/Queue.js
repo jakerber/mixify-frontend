@@ -160,7 +160,7 @@ export const QueuePage = () => {
                                                     <Group
                                                         key={result.track_id}
                                                         position='apart'
-                                                        spacing={0}
+                                                        spacing={2}
                                                         onMouseEnter={() => {
                                                             if (alreadyInQueue) return;
                                                             setSearchResultHover(result.track_id);
