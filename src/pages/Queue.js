@@ -199,7 +199,9 @@ export const QueuePage = () => {
                                                                 </Group>
                                                             </div>
                                                         </Group>
-                                                        {alreadyInQueue && (<Badge mr={5} miw={50}>Added</Badge>)}
+                                                        <div>
+                                                            {alreadyInQueue && (<Badge mr={5}>Added</Badge>)}
+                                                        </div>
                                                     </Group>
                                                 );
                                             })}
