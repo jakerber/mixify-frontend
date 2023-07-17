@@ -41,7 +41,7 @@ export const HomePage = () => {
                     </Button>
                     <Button color='dark' radius='xl' size='lg' disabled>
                         <Group spacing={12}>
-                            <Image maw={25} src={appleMusicLogo} alt='apple-music-logo' opacity={0.6} withPlaceholder />
+                            <Image maw={25} src={appleMusicLogo} alt='apple-music-logo' opacity={0.5} withPlaceholder />
                             <Text>Apple Music</Text>
                             <Badge size='xs' variant='outline' color='green' opacity={0.6} mt={2}>Coming Soon</Badge>
                         </Group>
@@ -63,7 +63,7 @@ export const HomePage = () => {
                         <PinInput
                             size='md'
                             value={queueName}
-                            onChange={(value) => setQueueName(value)}
+                            onChange={(value) => setQueueName(value.toUpperCase())}
                             length={6}
                             onComplete={() => navigate(`/queue/${queueName}`)}
                         />

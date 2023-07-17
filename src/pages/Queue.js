@@ -324,7 +324,7 @@ export const QueuePage = () => {
         ) : (
             <Paper
                 shadow='xs'
-                p='xs'
+                p='sm'
                 sx={{ backgroundColor: '#2b2c3d' }}
                 withBorder
                 m={20}
@@ -338,9 +338,8 @@ export const QueuePage = () => {
                                     <Center>
                                         <PinInput
                                             size='md'
-                                            inputMode='none'
                                             value={anotherQueueName}
-                                            onChange={(value) => setAnotherQueueName(value)}
+                                            onChange={(value) => setAnotherQueueName(value.toUpperCase())}
                                             length={6}
                                             onComplete={() => window.location.href = `/queue/${anotherQueueName}`}
                                         />
