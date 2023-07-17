@@ -232,7 +232,7 @@ export const QueuePage = () => {
                                         p='xs'
                                         sx={{ backgroundColor: '#2b2c3d' }}
                                         withBorder
-                                        mb={3}
+                                        mb={2}
                                     >
                                         <Group position='apart' noWrap>
                                             <Group noWrap>
