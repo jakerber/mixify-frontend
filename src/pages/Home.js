@@ -14,6 +14,7 @@ export const HomePage = () => {
     spotifyAuthUrl += `&response_type=token&show_dialogue=true`;
     spotifyAuthUrl += `&scope=user-read-playback-state%2Cuser-modify-playback-state`
 
+    window.document.title = 'Mixify – Home';
     return (
         <Stack align='stretch' p={20} pt={15}>
             <Paper

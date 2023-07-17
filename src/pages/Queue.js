@@ -64,6 +64,7 @@ export const QueuePage = () => {
         })();
     }, [debouncedSearchQuery]);
 
+    window.document.title = 'Mixify – Queue';
     return queueLoaded ? (
         !!queue ? (
             <Stack spacing={3} p={20} pt={15}>

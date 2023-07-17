@@ -23,6 +23,7 @@ export const SpotifyAuthPage = () => {
         })();
     }, [context.visitorId]);
 
+    window.document.title = 'Mixify – Spotify';
     return (
         <Paper
             shadow='xs'
