@@ -180,7 +180,7 @@ export const QueuePage = () => {
                                                     sx={{
                                                         backgroundColor: searchResultHover === result.track_id ? '#454657' : 'none',
                                                         padding: '7px 10px',
-                                                        cursor: 'pointer'
+                                                        cursor: alreadyInQueue ? 'default' : 'pointer'
                                                     }}
                                                     noWrap
                                                 >
