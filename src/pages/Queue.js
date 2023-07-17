@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext, useParams, useNavigate } from 'react-router-dom';
 import { fetchQueue, endQueue, pauseQueue, unpauseQueue, removeSongUpvote, upvoteSong, searchForSong, addSongToQueue, QUEUE_NOT_FOUND_ERROR_MSG } from '../services';
-import { Group, Avatar, Loader, Text, Input, Stack, Badge, Indicator, Button, Paper, ActionIcon, Center, PinInput } from '@mantine/core';
+import { Group, Avatar, Loader, Text, Input, ScrollArea, Stack, Badge, Indicator, Button, Paper, ActionIcon, Center, PinInput } from '@mantine/core';
 import { IconSearch, IconThumbUp, IconPlayerPauseFilled, IconPlayerStopFilled, IconLock, IconX, IconArrowLeft, IconExplicit } from '@tabler/icons-react';
 
 const useDebounce = (value) => {
@@ -147,61 +147,64 @@ export const QueuePage = () => {
                                 <Paper
                                     shadow='xs'
                                     p={0}
+                                    mah={300}
                                     sx={{ backgroundColor: '#2b2c3d', overflow: 'hidden' }}
                                     withBorder
                                 >
-                                    <Stack spacing={0}>
-                                        {searchResults.map(result => {
-                                            const adding = result.track_id === addingTrackId;
-                                            const alreadyInQueue = queue.queued_songs.find((queuedSong => queuedSong.spotify_track_id === result.track_id));
-                                            return (
-                                                <Group
-                                                    key={result.track_id}
-                                                    position='apart'
-                                                    spacing={0}
-                                                    onMouseEnter={() => {
-                                                        if (alreadyInQueue) return;
-                                                        setSearchResultHover(result.track_id);
-                                                    }}
-                                                    onMouseLeave={() => setSearchResultHover()}
-                                                    onClick={() => {
-                                                        if (!!addingTrackId || alreadyInQueue) return;
-                                                        setAddingTrackId(result.track_id);
-                                                        (async () => {
-                                                            try {
-                                                                const newQueue = await addSongToQueue(queue.id, result.track_id, context.visitorId);
-                                                                setQueue(newQueue);
-                                                            } catch (error) {
-                                                                await fetchAndLoadQueue();
-                                                            }
-                                                            setAddingTrackId('');
-                                                        })();
-                                                    }}
-                                                    sx={{
-                                                        backgroundColor: searchResultHover === result.track_id ? '#454657' : 'none',
-                                                        padding: '7px 10px',
-                                                        cursor: alreadyInQueue ? 'default' : 'pointer'
-                                                    }}
-                                                    noWrap
-                                                >
-                                                    <Group spacing={10} noWrap>
-                                                        {adding && <Loader size='xs' />}
-                                                        <Avatar src={result.track_album_cover_url} opacity={adding || alreadyInQueue ? 0.5 : 1} />
-                                                        <div>
-                                                            <Text size='sm' opacity={adding || alreadyInQueue ? 0.5 : 1}>{result.track_name}</Text>
-                                                            <Group spacing={4} noWrap>
-                                                                {result.track_explicit && (<IconExplicit opacity={adding || alreadyInQueue ? 0.5 : 1} size={13} />)}
-                                                                <Text size='xs' opacity={adding || alreadyInQueue ? 0.3 : 0.65} truncate>
-                                                                    {result.track_artist}
-                                                                </Text>
-                                                            </Group>
-                                                        </div>
+                                    <ScrollArea h={300}>
+                                        <Stack spacing={0}>
+                                            {searchResults.map(result => {
+                                                const adding = result.track_id === addingTrackId;
+                                                const alreadyInQueue = queue.queued_songs.find((queuedSong => queuedSong.spotify_track_id === result.track_id));
+                                                return (
+                                                    <Group
+                                                        key={result.track_id}
+                                                        position='apart'
+                                                        spacing={0}
+                                                        onMouseEnter={() => {
+                                                            if (alreadyInQueue) return;
+                                                            setSearchResultHover(result.track_id);
+                                                        }}
+                                                        onMouseLeave={() => setSearchResultHover()}
+                                                        onClick={() => {
+                                                            if (!!addingTrackId || alreadyInQueue) return;
+                                                            setAddingTrackId(result.track_id);
+                                                            (async () => {
+                                                                try {
+                                                                    const newQueue = await addSongToQueue(queue.id, result.track_id, context.visitorId);
+                                                                    setQueue(newQueue);
+                                                                } catch (error) {
+                                                                    await fetchAndLoadQueue();
+                                                                }
+                                                                setAddingTrackId('');
+                                                            })();
+                                                        }}
+                                                        sx={{
+                                                            backgroundColor: searchResultHover === result.track_id ? '#454657' : 'none',
+                                                            padding: '7px 10px',
+                                                            cursor: alreadyInQueue ? 'default' : 'pointer'
+                                                        }}
+                                                        noWrap
+                                                    >
+                                                        <Group spacing={10} noWrap>
+                                                            {adding && <Loader size='xs' />}
+                                                            <Avatar src={result.track_album_cover_url} opacity={adding || alreadyInQueue ? 0.5 : 1} />
+                                                            <div>
+                                                                <Text size='sm' opacity={adding || alreadyInQueue ? 0.5 : 1}>{result.track_name}</Text>
+                                                                <Group spacing={4} noWrap>
+                                                                    {result.track_explicit && (<IconExplicit opacity={adding || alreadyInQueue ? 0.5 : 1} size={13} />)}
+                                                                    <Text size='xs' opacity={adding || alreadyInQueue ? 0.3 : 0.65} truncate>
+                                                                        {result.track_artist}
+                                                                    </Text>
+                                                                </Group>
+                                                            </div>
+                                                        </Group>
+                                                        {alreadyInQueue && (<Badge mr={5} miw={50}>Added</Badge>)}
                                                     </Group>
-                                                    {alreadyInQueue && (<Badge mr={5} miw={50}>Added</Badge>)}
-                                                </Group>
-                                            );
-                                        })}
-                                    </Stack>
+                                                );
+                                            })}
+                                        </Stack>
+                                    </ScrollArea>
                                 </Paper>
                             ) : (
                                 <Paper
@@ -229,7 +232,7 @@ export const QueuePage = () => {
                                         p='xs'
                                         sx={{ backgroundColor: '#2b2c3d' }}
                                         withBorder
-                                        mb={2}
+                                        mb={3}
                                     >
                                         <Group position='apart' noWrap>
                                             <Group noWrap>
