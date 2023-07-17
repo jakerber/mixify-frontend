@@ -128,14 +128,14 @@ export const QueuePage = () => {
                 )}
                 <Input
                     placeholder='Search music'
-                    icon={<IconSearch size={17} stroke={1.5} />}
+                    icon={<IconSearch size={19} stroke={1.5} />}
                     value={searchQuery}
                     onChange={(event) => setSearchQuery(event.target.value)}
                     rightSection={(() => {
                         if (!searchQuery) return null;
                         return (
                             <ActionIcon onClick={() => setSearchQuery('')}>
-                                <IconX size={20} stroke={1.5} opacity={0.65} />
+                                <IconX size={25} stroke={1.5} opacity={0.65} />
                             </ActionIcon>
                         );
                     })()}
