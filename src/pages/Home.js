@@ -59,10 +59,9 @@ export const HomePage = () => {
                     <Title order={4}>Join</Title>
                     <Text size='xs'>Enter the 6 digit queue name</Text>
                     <Space h={15} />
-                    <Center>
+                    <Center mb={5}>
                         <PinInput
                             size='md'
-                            inputMode='none'
                             value={queueName}
                             onChange={(value) => setQueueName(value)}
                             length={6}
