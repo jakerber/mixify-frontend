@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import { Badge, Button, Container, Header, Group, Title, Popover, Stack, Text, rem, Center, Image } from '@mantine/core';
+import { Badge, Button, Container, Header, Group, Title, Popover, Stack, rem, Center, Image } from '@mantine/core';
 import { IconFingerprint } from '@tabler/icons-react';
 import mixifyLogoZoom from '../assets/mixify-logo-zoom.png';
 
@@ -45,10 +45,10 @@ export const RootPage = () => {
                             </Button>
                         </Popover.Target>
                         <Popover.Dropdown>
-                            <Stack spacing={5}>
-                                <Text size='sm'>Your activity</Text>
-                                <Center>
-                                    <Badge size='xs' variant='outline' color='green' mt={2}>Coming Soon</Badge>
+                            <Stack spacing={5} mb={2}>
+                                <Title order={5}>Your activity</Title>
+                                <Center h={30}>
+                                    <Badge size='xs' variant='outline' color='green' opacity={0.85} mt={2}>Coming Soon</Badge>
                                 </Center>
                             </Stack>
                         </Popover.Dropdown>

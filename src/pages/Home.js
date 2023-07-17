@@ -43,7 +43,7 @@ export const HomePage = () => {
                         <Group spacing={12}>
                             <Image maw={25} src={appleMusicLogo} alt='apple-music-logo' opacity={0.5} withPlaceholder />
                             <Text>Apple Music</Text>
-                            <Badge size='xs' variant='outline' color='green' opacity={0.6} mt={2}>Coming Soon</Badge>
+                            <Badge size='xs' variant='outline' color='green' mt={2}>Coming Soon</Badge>
                         </Group>
                     </Button>
                 </Stack>
