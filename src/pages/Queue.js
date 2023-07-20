@@ -117,12 +117,12 @@ export const QueuePage = () => {
                         >
                             {isQueueSubscriber ? (
                                 <Group spacing={12}>
-                                    <Image maw={20} src={spotifyLogo} alt='spotify-logo' withPlaceholder />
+                                    {!subscribeButtonLoading && (<Image maw={20} src={spotifyLogo} alt='spotify-logo' withPlaceholder />)}
                                     <Text>Subscribed</Text>
                                 </Group>
                             ) : (
                                 <Group spacing={12}>
-                                    <Image maw={20} src={spotifyLogo} alt='spotify-logo' withPlaceholder />
+                                    {!subscribeButtonLoading && (<Image maw={20} src={spotifyLogo} alt='spotify-logo' withPlaceholder />)}
                                     <Text>Subscribe</Text>
                                 </Group>
                             )}
