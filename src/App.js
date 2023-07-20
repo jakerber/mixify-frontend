@@ -3,7 +3,8 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { RootPage } from './pages/Root';
 import { HomePage } from './pages/Home';
 import { QueuePage } from './pages/Queue';
-import { SpotifyAuthPage } from './pages/SpotifyAuth';
+import { SpotifyHostAuthPage } from './pages/SpotifyHostAuth';
+import { SpotifySubscriberAuthPage } from './pages/SpotifySubscriberAuth';
 import { MantineProvider } from '@mantine/core';
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
       children: [
         { path: '/', element: <HomePage /> },
         { path: 'queue/:queueName', element: <QueuePage /> },
-        { path: 'auth/spotify', element: <SpotifyAuthPage /> },
+        { path: 'auth/spotify/host', element: <SpotifyHostAuthPage /> },
+        { path: 'auth/spotify/subscriber', element: <SpotifySubscriberAuthPage /> },
         { path: '*', element: <Navigate to='/' /> },
       ]
     }

@@ -49,3 +49,11 @@ export const pauseQueue = async (queueId) => {
 export const unpauseQueue = async (queueId) => {
     return execRequest(`${API_URL_BASE}/v1/queue/unpause/${queueId}`);
 };
+
+export const subscribeToQueue = async (queueId, spotifyAccessToken, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/subscribe/${queueId}/${spotifyAccessToken}/${fpjsVisitorId}`);
+};
+
+export const unsubscribeFromQueue = async (queueId, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/unsubscribe/${queueId}/${fpjsVisitorId}`);
+};

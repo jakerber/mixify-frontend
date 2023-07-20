@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useOutletContext, useParams, useNavigate } from 'react-router-dom';
-import { fetchQueue, endQueue, pauseQueue, unpauseQueue, removeSongUpvote, upvoteSong, searchForSong, addSongToQueue, QUEUE_NOT_FOUND_ERROR_MSG } from '../services';
-import { Group, Avatar, Loader, Text, Input, ScrollArea, Stack, Badge, Indicator, Button, Paper, ActionIcon, Center, PinInput } from '@mantine/core';
-import { IconSearch, IconThumbUp, IconPlayerPauseFilled, IconPlayerStopFilled, IconLock, IconX, IconArrowLeft, IconExplicit } from '@tabler/icons-react';
+import { fetchQueue, endQueue, pauseQueue, unpauseQueue, removeSongUpvote, upvoteSong, searchForSong, addSongToQueue, QUEUE_NOT_FOUND_ERROR_MSG, unsubscribeFromQueue } from '../services';
+import { Group, Avatar, Loader, Text, Input, ScrollArea, Stack, Image, Badge, Indicator, Button, Paper, ActionIcon, Center, PinInput } from '@mantine/core';
+import { IconSearch, IconThumbUp, IconPlayerPauseFilled, IconPlayerStopFilled, IconLock, IconX, IconArrowLeft, IconExplicit, IconCheck } from '@tabler/icons-react';
+import spotifyLogo from '../assets/spotify-logo.png';
 
 const useDebounce = (value) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -28,11 +29,18 @@ export const QueuePage = () => {
 
     const [endButtonLoading, setEndButtonLoading] = useState(false);
     const [pauseButtonLoading, setPauseButtonLoading] = useState(false);
+    const [subscribeButtonLoading, setSubscribeButtonLoading] = useState(false);
     const [addingTrackId, setAddingTrackId] = useState('');
     const [upvotingQueueSongId, setUpvotingQueueSongId] = useState('');
     const [searchResultHover, setSearchResultHover] = useState();
 
     const [anotherQueueName, setAnotherQueueName] = useState('');
+
+    let spotifyAuthUrl = `https://accounts.spotify.com/authorize?`;
+    spotifyAuthUrl += `client_id=${process.env.REACT_APP_SPOTIFY_CLIENT_ID}`;
+    spotifyAuthUrl += `&redirect_uri=${process.env.REACT_APP_SPOTIFY_SUBSCRIBER_REDIRECT_URI}`;
+    spotifyAuthUrl += `&response_type=token&show_dialogue=true`;
+    spotifyAuthUrl += `&scope=user-modify-playback-state`;
 
     const fetchAndLoadQueue = async () => {
         try {
@@ -65,22 +73,63 @@ export const QueuePage = () => {
     }, [debouncedSearchQuery]);
 
     window.document.title = 'Mixify – Queue';
+    const isQueueOwner = !!queue && queue.started_by_fpjs_visitor_id === context.visitorId;
+    const isQueueSubscriber = !!queue && queue.subscribers.find(subscriber => subscriber.fpjs_visitor_id === context.visitorId);
     return queueLoaded ? (
         !!queue ? (
             <Stack spacing={3} p={20} pt={15}>
-                <Indicator
-                    processing
-                    size={18}
-                    position='top-start'
-                    offset={4}
-                    color='green'
-                    withBorder
-                    disabled={!!queue.paused_on_utc}
-                    mb={10}
-                >
-                    <Badge size='xl' p={18}>Queue {`${queue.name}`}</Badge>
-                </Indicator>
-                {!!queue && queue.started_by_fpjs_visitor_id === context.visitorId && (
+                <Group>
+                    <Indicator
+                        processing
+                        size={18}
+                        position='top-start'
+                        offset={4}
+                        color='green'
+                        withBorder
+                        disabled={!!queue.paused_on_utc}
+                        mb={10}
+                    >
+                        <Badge size='xl' p={18}>Queue {`${queue.name}`}</Badge>
+                    </Indicator>
+                    {!isQueueOwner && (
+                        <Button
+                            color='dark'
+                            radius='xl'
+                            size='sm'
+                            onClick={() => {
+                                setSubscribeButtonLoading(true);
+                                (async () => {
+                                    if (!isQueueSubscriber) {
+                                        window.localStorage.setItem('__mixify_sqid', queue.id);
+                                        window.location.href = spotifyAuthUrl;
+                                    } else {
+                                        const updatedQueue = await unsubscribeFromQueue(queue.id, context.visitorId);
+                                        setQueue(updatedQueue);
+                                    }
+                                    setSubscribeButtonLoading(false);
+                                })();
+                            }}
+                            rightIcon={isQueueSubscriber ? <IconCheck size={18} stroke={2.5} /> : null}
+                            sx={{ backgroundColor: 'black' }}
+                            styles={{ rightIcon: { marginLeft: 7 } }}
+                            loading={subscribeButtonLoading}
+                            mb={8}
+                        >
+                            {isQueueSubscriber ? (
+                                <Group spacing={12}>
+                                    <Image maw={20} src={spotifyLogo} alt='spotify-logo' withPlaceholder />
+                                    <Text>Subscribed</Text>
+                                </Group>
+                            ) : (
+                                <Group spacing={12}>
+                                    <Image maw={20} src={spotifyLogo} alt='spotify-logo' withPlaceholder />
+                                    <Text>Subscribe</Text>
+                                </Group>
+                            )}
+                        </Button>
+                    )}
+                </Group>
+                {isQueueOwner && (
                     <Group mb={10}>
                         <Button
                             size='sm'

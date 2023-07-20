@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
-import { createQueue } from '../services';
+import { subscribeToQueue } from '../services';
 import { Paper, Center, Stack, Text, Loader } from '@mantine/core';
 
-export const SpotifyAuthPage = () => {
+export const SpotifySubscriberAuthPage = () => {
     const context = useOutletContext();
     const navigate = useNavigate();
     const url = window.location.href;
@@ -14,7 +14,8 @@ export const SpotifyAuthPage = () => {
     useEffect(() => {
         if (!context.visitorId) return;
         (async () => {
-            const queue = await createQueue(spotifyAccessToken, context.visitorId);
+            const queueId = window.localStorage.getItem('__mixify_sqid');
+            const queue = await subscribeToQueue(queueId, spotifyAccessToken, context.visitorId);
             if (!queue || !queue.name) {
                 navigate('/');
                 return;  // TODO: Display error.

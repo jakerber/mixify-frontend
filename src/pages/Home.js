@@ -10,9 +10,9 @@ export const HomePage = () => {
     const [queueName, setQueueName] = useState('');
     let spotifyAuthUrl = `https://accounts.spotify.com/authorize?`;
     spotifyAuthUrl += `client_id=${process.env.REACT_APP_SPOTIFY_CLIENT_ID}`;
-    spotifyAuthUrl += `&redirect_uri=${process.env.REACT_APP_SPOTIFY_REDIRECT_URI}`;
+    spotifyAuthUrl += `&redirect_uri=${process.env.REACT_APP_SPOTIFY_HOST_REDIRECT_URI}`;
     spotifyAuthUrl += `&response_type=token&show_dialogue=true`;
-    spotifyAuthUrl += `&scope=user-read-playback-state%2Cuser-modify-playback-state`
+    spotifyAuthUrl += `&scope=user-read-playback-state%2Cuser-modify-playback-state`;
 
     window.document.title = 'Mixify – Home';
     return (
