@@ -78,7 +78,7 @@ export const QueuePage = () => {
     return queueLoaded ? (
         !!queue ? (
             <Stack spacing={3} p={20} pt={15}>
-                <Group>
+                <Group spacing={10}>
                     <Indicator
                         processing
                         size={18}
@@ -118,12 +118,12 @@ export const QueuePage = () => {
                             {isQueueSubscriber ? (
                                 <Group spacing={12}>
                                     {!subscribeButtonLoading && (<Image maw={20} src={spotifyLogo} alt='spotify-logo' withPlaceholder />)}
-                                    <Text>Subscribed</Text>
+                                    <Text>Listening</Text>
                                 </Group>
                             ) : (
                                 <Group spacing={12}>
                                     {!subscribeButtonLoading && (<Image maw={20} src={spotifyLogo} alt='spotify-logo' withPlaceholder />)}
-                                    <Text>Subscribe</Text>
+                                    <Text>Listen</Text>
                                 </Group>
                             )}
                         </Button>
