@@ -38,7 +38,7 @@ export const QueuePage = () => {
 
     let spotifyAuthUrl = `https://accounts.spotify.com/authorize?`;
     spotifyAuthUrl += `client_id=${process.env.REACT_APP_SPOTIFY_CLIENT_ID}`;
-    spotifyAuthUrl += `&redirect_uri=${process.env.REACT_APP_SPOTIFY_SUBSCRIBER_REDIRECT_URI}`;
+    spotifyAuthUrl += `&redirect_uri=${process.env.REACT_APP_SPOTIFY_SUBSCRIBE_REDIRECT_URI}`;
     spotifyAuthUrl += `&response_type=token&show_dialogue=true`;
     spotifyAuthUrl += `&scope=user-modify-playback-state`;
 

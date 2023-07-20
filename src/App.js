@@ -16,7 +16,7 @@ function App() {
         { path: '/', element: <HomePage /> },
         { path: 'queue/:queueName', element: <QueuePage /> },
         { path: 'auth/spotify/host', element: <SpotifyHostAuthPage /> },
-        { path: 'auth/spotify/subscriber', element: <SpotifySubscriberAuthPage /> },
+        { path: 'auth/spotify/subscribe', element: <SpotifySubscriberAuthPage /> },
         { path: '*', element: <Navigate to='/' /> },
       ]
     }
