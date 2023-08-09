@@ -12,7 +12,8 @@ export const HomePage = () => {
     spotifyAuthUrl += `client_id=${process.env.REACT_APP_SPOTIFY_CLIENT_ID}`;
     spotifyAuthUrl += `&redirect_uri=${process.env.REACT_APP_SPOTIFY_HOST_REDIRECT_URI}`;
     spotifyAuthUrl += `&response_type=token&show_dialogue=true`;
-    spotifyAuthUrl += `&scope=user-read-playback-state%2Cuser-modify-playback-state`;
+    spotifyAuthUrl += `&scope=user-read-playback-state%2Cuser-modify-playback-state`
+    spotifyAuthUrl += `%2Cuser-read-private%2Cuser-read-email`;
 
     window.document.title = 'Mixify – Home';
     return (
