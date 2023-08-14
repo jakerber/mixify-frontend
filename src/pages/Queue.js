@@ -330,13 +330,12 @@ export const QueuePage = () => {
                     }
                     {queue.currently_playing && (
                         <>
-                            <Text size='sm' mt={10}>Now</Text>
+                            <Text size='sm' mt={10} mb={-1}>Now</Text>
                             <Paper
                                 shadow='xs'
                                 p='xs'
                                 sx={{ backgroundColor: '#2b2c3d' }}
                                 withBorder
-                                mb={2}
                             >
                                 <Group position='apart' noWrap>
                                     <Group noWrap>
