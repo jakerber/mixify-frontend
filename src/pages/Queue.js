@@ -92,7 +92,7 @@ export const QueuePage = () => {
             <>
                 <Modal opened={!!boostingQueueSong} onClose={() => setBoostingQueueSong()} withCloseButton={false} centered>
                     <Stack spacing='xs'>
-                        <Text>Pay $0.99 to play {boostingQueueSong?.name} by {boostingQueueSong?.artist} next?</Text>
+                        <Text mb={2}>Pay $0.99 to play {boostingQueueSong?.name} by {boostingQueueSong?.artist} next?</Text>
                         <ExpressCheckoutElement
                             onReady={onBoostReady}
                             onConfirm={() => {
@@ -111,11 +111,11 @@ export const QueuePage = () => {
                         />
                         {boostPaymentLoading && (
                             <Group position='center' grow noWrap>
-                                <Loader size='md' />
+                                <Loader mt={-2} size='md' />
                             </Group>
                         )}
                         {boostUnavailable && (
-                            <Text fs='italic' c='dimmed' mt={-6}>No payment methods available</Text>
+                            <Text fs='italic' c='dimmed' mt={-8}>No payment methods available</Text>
                         )}
                         <div>
                             <Button
