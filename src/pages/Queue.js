@@ -35,6 +35,7 @@ export const QueuePage = () => {
     const [upvotingQueueSongId, setUpvotingQueueSongId] = useState('');
     const [searchResultHover, setSearchResultHover] = useState();
 
+    const [boostModalOpen, setBoostModalOpen] = useState(false);
     const [boostingQueueSong, setBoostingQueueSong] = useState();
     const [boostPaymentLoading, setBoostPaymentLoading] = useState(false);
     const [boostUnavailable, setBoostUnavailable] = useState(false);
@@ -90,9 +91,9 @@ export const QueuePage = () => {
     return queueLoaded ? (
         !!queue ? (
             <>
-                <Modal opened={!!boostingQueueSong} onClose={() => setBoostingQueueSong()} withCloseButton={false} centered>
+                <Modal opened={boostModalOpen} onClose={() => setBoostModalOpen(false)} withCloseButton={false} centered>
                     <Stack spacing='xs'>
-                        <Text mb={2}>Pay $0.99 to play {boostingQueueSong?.name} by {boostingQueueSong?.artist} next?</Text>
+                        <Text mb={4}>Pay $0.99 to play {boostingQueueSong?.name} by {boostingQueueSong?.artist} next?</Text>
                         <ExpressCheckoutElement
                             onReady={onBoostReady}
                             onConfirm={() => {
@@ -104,18 +105,18 @@ export const QueuePage = () => {
                                     } catch (error) {
                                         await fetchAndLoadQueue();
                                     } finally {
-                                        setBoostingQueueSong();
+                                        setBoostModalOpen(false);
                                     }
                                 })();
                             }}
                         />
                         {boostPaymentLoading && (
                             <Group position='center' grow noWrap>
-                                <Loader mt={-2} size='md' />
+                                <Loader mt={-6} size='md' />
                             </Group>
                         )}
                         {boostUnavailable && (
-                            <Text fs='italic' c='dimmed' mt={-8}>No payment methods available</Text>
+                            <Text fs='italic' c='dimmed' mt={-10}>No payment methods available</Text>
                         )}
                         <div>
                             <Button
@@ -125,7 +126,7 @@ export const QueuePage = () => {
                                 size='xs'
                                 variant='gradient'
                                 onClick={() => {
-                                    setBoostingQueueSong();
+                                    setBoostModalOpen(false);
                                 }}
                             >
                                 Back to queue
@@ -405,6 +406,7 @@ export const QueuePage = () => {
                                                                     onClick={() => {
                                                                         setBoostingQueueSong(song);
                                                                         setBoostPaymentLoading(true);
+                                                                        setBoostModalOpen(true);
                                                                     }}
                                                                 >
                                                                     {boostingQueueSong?.id === song.id ? (
