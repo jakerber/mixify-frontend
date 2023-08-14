@@ -330,7 +330,7 @@ export const QueuePage = () => {
                     }
                     {queue.currently_playing && (
                         <>
-                            <Text size='sm' mt={10} mb={-1}>Now</Text>
+                            <Text size='sm' mt={6} mb={-1}>Now</Text>
                             <Paper
                                 shadow='xs'
                                 p='xs'
@@ -352,7 +352,7 @@ export const QueuePage = () => {
                             </Paper>
                         </>
                     )}
-                    <Text size='sm' mt={10}>Next up</Text>
+                    <Text size='sm' mt={8}>Next up</Text>
                     {
                         queue.queued_songs.length > 0 ? (
                             <>
