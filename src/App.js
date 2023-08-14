@@ -6,6 +6,11 @@ import { QueuePage } from './pages/Queue';
 import { SpotifyHostAuthPage } from './pages/SpotifyHostAuth';
 import { SpotifySubscriberAuthPage } from './pages/SpotifySubscriberAuth';
 import { MantineProvider } from '@mantine/core';
+import { loadStripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
+
+const stripePromise = loadStripe('pk_test_51NepssDF0aMBCDn8ACF0aE480SKvA2b4IqULop8Ricon4JsLr5YhwdXAHr4AdXfYGr86IOoXpXuk5ymFsQ7BBXel00mvEEIDNu');
+const stripeOptions = { mode: 'payment', amount: 99, currency: 'usd' };
 
 function App() {
   const router = createBrowserRouter([
@@ -45,7 +50,9 @@ function App() {
         },
       }}
     >
-      <RouterProvider router={router} />
+      <Elements stripe={stripePromise} options={stripeOptions}>
+        <RouterProvider router={router} />
+      </Elements>
     </MantineProvider>
   );
 }

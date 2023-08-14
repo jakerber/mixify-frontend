@@ -57,3 +57,7 @@ export const subscribeToQueue = async (queueId, spotifyAccessToken, fpjsVisitorI
 export const unsubscribeFromQueue = async (queueId, fpjsVisitorId) => {
     return execRequest(`${API_URL_BASE}/v1/queue/unsubscribe/${queueId}/${fpjsVisitorId}`);
 };
+
+export const boostQueueSong = async (queueSongId, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/boost/${queueSongId}/${fpjsVisitorId}`);
+};
