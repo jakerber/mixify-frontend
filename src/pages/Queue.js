@@ -36,6 +36,7 @@ export const QueuePage = () => {
     const [searchResultHover, setSearchResultHover] = useState();
 
     const [boostingQueueSong, setBoostingQueueSong] = useState();
+    const [boostPaymentLoading, setBoostPaymentLoading] = useState(false);
     const [boostUnavailable, setBoostUnavailable] = useState(false);
 
     const [anotherQueueName, setAnotherQueueName] = useState('');
@@ -60,6 +61,7 @@ export const QueuePage = () => {
         if (!availablePaymentMethods) {
             setBoostUnavailable(true);
         }
+        setBoostPaymentLoading(false);
     };
 
     useEffect(() => {
@@ -108,7 +110,14 @@ export const QueuePage = () => {
                             }}
                             options={{ buttonTheme: { applePay: 'white-outline' } }}
                         />
-                        <Text fs='italic' c='dimmed'>No payment methods available</Text>
+                        {boostPaymentLoading && (
+                            <Group position='center' grow noWrap>
+                                <Loader size='md' />
+                            </Group>
+                        )}
+                        {boostUnavailable && (
+                            <Text fs='italic' c='dimmed' mt={-6}>No payment methods available</Text>
+                        )}
                         <div>
                             <Button
                                 mt={10}
@@ -397,6 +406,7 @@ export const QueuePage = () => {
                                                                     size='lg'
                                                                     onClick={() => {
                                                                         setBoostingQueueSong(song);
+                                                                        setBoostPaymentLoading(true);
                                                                     }}
                                                                 >
                                                                     {boostingQueueSong?.id === song.id ? (
