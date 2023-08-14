@@ -271,6 +271,31 @@ export const QueuePage = () => {
                         </>
                     )
                 }
+                {queue.currently_playing && (
+                    <>
+                        <Text size='sm' mt={10}>Now</Text>
+                        <Paper
+                            shadow='xs'
+                            p='xs'
+                            sx={{ backgroundColor: '#2b2c3d' }}
+                            withBorder
+                            mb={2}
+                        >
+                            <Group position='apart' noWrap>
+                                <Group noWrap>
+                                    <Avatar src={queue.currently_playing.album_cover_url} />
+
+                                    <div>
+                                        <Text size='sm'>{queue.currently_playing.name}</Text>
+                                        <Text size='xs' opacity={0.65}>
+                                            {queue.currently_playing.artist}
+                                        </Text>
+                                    </div>
+                                </Group>
+                            </Group>
+                        </Paper>
+                    </>
+                )}
                 <Text size='sm' mt={10}>Next up</Text>
                 {
                     queue.queued_songs.length > 0 ? (
