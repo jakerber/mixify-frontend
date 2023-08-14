@@ -394,6 +394,7 @@ export const QueuePage = () => {
                                                                 size='lg'
                                                                 color='yellow'
                                                                 variant='light'
+                                                                mr={-1}
                                                             >
                                                                 <IconLock size={25} stroke={1} />
                                                             </ActionIcon>
