@@ -409,7 +409,7 @@ export const QueuePage = () => {
                                                                         setBoostModalOpen(true);
                                                                     }}
                                                                 >
-                                                                    {boostingQueueSong?.id === song.id ? (
+                                                                    {boostModalOpen && boostingQueueSong?.id === song.id ? (
                                                                         <Loader size='xs' />
                                                                     ) : (
                                                                         <IconRocket size={25} stroke={1} />
