@@ -108,7 +108,6 @@ export const QueuePage = () => {
                                     }
                                 })();
                             }}
-                            options={{ buttonTheme: { applePay: 'white-outline' } }}
                         />
                         {boostPaymentLoading && (
                             <Group position='center' grow noWrap>
