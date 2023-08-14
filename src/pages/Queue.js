@@ -468,9 +468,9 @@ export const QueuePage = () => {
                                                                     </>
                                                                 </ActionIcon>
                                                             )}
+                                                            <Text miw={10}>{song.upvotes.length}</Text>
                                                         </>
                                                     )}
-                                                    <Text miw={10}>{song.upvotes.length}</Text>
                                                 </Group>
                                             </Group>
                                         </Paper>
