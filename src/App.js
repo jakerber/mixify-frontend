@@ -9,7 +9,7 @@ import { MantineProvider } from '@mantine/core';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 
-const stripePromise = loadStripe('pk_test_51NepssDF0aMBCDn8ACF0aE480SKvA2b4IqULop8Ricon4JsLr5YhwdXAHr4AdXfYGr86IOoXpXuk5ymFsQ7BBXel00mvEEIDNu');
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
 const stripeOptions = { mode: 'payment', amount: 99, currency: 'usd' };
 
 function App() {
