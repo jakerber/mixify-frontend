@@ -403,6 +403,7 @@ export const QueuePage = () => {
                                                             {!boostUnavailable && (
                                                                 <ActionIcon
                                                                     size='lg'
+                                                                    mr={-5}
                                                                     onClick={() => {
                                                                         setBoostingQueueSong(song);
                                                                         setBoostPaymentLoading(true);
