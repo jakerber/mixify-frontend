@@ -58,10 +58,6 @@ export const unsubscribeFromQueue = async (queueId, fpjsVisitorId) => {
     return execRequest(`${API_URL_BASE}/v1/queue/unsubscribe/${queueId}/${fpjsVisitorId}`);
 };
 
-export const createBoostPayment = async (queueSongId) => {
-    return execRequest(`${API_URL_BASE}/v1/queue/boost/payment/${queueSongId}`);
-};
-
 export const boostQueueSong = async (queueSongId, fpjsVisitorId) => {
     return execRequest(`${API_URL_BASE}/v1/queue/boost/${queueSongId}/${fpjsVisitorId}`);
 };
