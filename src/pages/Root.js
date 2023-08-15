@@ -1,13 +1,14 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
-import { Button, Container, Header, Group, Title, rem, Image } from '@mantine/core';
+import { Button, Container, Header, Group, Title, rem, Image, Popover, Stack, Text } from '@mantine/core';
 import { IconFingerprint } from '@tabler/icons-react';
 import mixifyLogoZoom from '../assets/mixify-logo-zoom.png';
 
 export const RootPage = () => {
     const navigate = useNavigate();
     const [visitorId, setVisitorId] = useState('');
+    const [balance, setBalance] = useState();
     const headerHeight = rem(60);
 
     useEffect(() => {
@@ -38,13 +39,28 @@ export const RootPage = () => {
                         <Image src={mixifyLogoZoom} radius='md' width={45} />
                         <Title order={2}>Mixify</Title>
                     </Group>
+                    {balance && (
+                        <Popover width={200} position='bottom-end' withArrow>
+                            <Popover.Target>
+                                <Button radius='xl' variant='gradient' size='sm' h={32} leftIcon={<IconFingerprint size={17} stroke={3} />}>
+                                    {!!visitorId ? visitorId.slice(0, 10) : `Loading...`}
+                                </Button>
+                            </Popover.Target>
+                            <Popover.Dropdown>
+                                <Stack spacing={5}>
+                                    <Title order={5}>Your balance</Title>
+                                    <Text size='lg'>{balance}</Text>
+                                </Stack>
+                            </Popover.Dropdown>
+                        </Popover>
+                    )}
                     <Button radius='xl' variant='gradient' size='sm' h={32} leftIcon={<IconFingerprint size={17} stroke={3} />}>
                         {!!visitorId ? visitorId.slice(0, 10) : `Loading...`}
                     </Button>
                 </Container>
             </Header>
             {!!visitorId && (
-                <Outlet context={{ visitorId }} />
+                <Outlet context={{ visitorId, setBalance }} />
             )}
         </div>
     );

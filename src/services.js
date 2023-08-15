@@ -14,8 +14,8 @@ const execRequest = async (url) => {
 
 export const QUEUE_NOT_FOUND_ERROR_MSG = 'queue not found';
 
-export const fetchQueue = async (queueName) => {
-    return execRequest(`${API_URL_BASE}/v1/queue/${queueName}`);
+export const fetchQueue = async (queueName, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/${queueName}/${fpjsVisitorId}`);
 };
 
 export const createQueue = async (spotifyAccessToken, fpjsVisitorId) => {
@@ -38,16 +38,16 @@ export const addSongToQueue = async (queueId, spotifyTrackId, fpjsVisitorId) => 
     return execRequest(`${API_URL_BASE}/v1/queue/add/${queueId}/${spotifyTrackId}/${fpjsVisitorId}`);
 };
 
-export const endQueue = async (queueId) => {
-    return execRequest(`${API_URL_BASE}/v1/queue/end/${queueId}`);
+export const endQueue = async (queueId, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/end/${queueId}/${fpjsVisitorId}`);
 };
 
-export const pauseQueue = async (queueId) => {
-    return execRequest(`${API_URL_BASE}/v1/queue/pause/${queueId}`);
+export const pauseQueue = async (queueId, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/pause/${queueId}/${fpjsVisitorId}`);
 };
 
-export const unpauseQueue = async (queueId) => {
-    return execRequest(`${API_URL_BASE}/v1/queue/unpause/${queueId}`);
+export const unpauseQueue = async (queueId, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/unpause/${queueId}/${fpjsVisitorId}`);
 };
 
 export const subscribeToQueue = async (queueId, spotifyAccessToken, fpjsVisitorId) => {

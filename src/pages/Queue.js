@@ -53,7 +53,9 @@ export const QueuePage = () => {
 
     const fetchAndLoadQueue = async () => {
         try {
-            setQueue(await fetchQueue(queueName));
+            const queue = await fetchQueue(queueName, context.visitorId);
+            setQueue(queue);
+            context.setBalance(queue.balance);
         } catch (error) {
             setQueueError(error.message);
         } finally {
@@ -69,6 +71,8 @@ export const QueuePage = () => {
     };
 
     const onBoostConfirm = async (event) => {
+        if (!boostingQueueSong) return;
+
         // Step 1/4: Verify Stripe is ready for payment
         if (!stripe) {
             notifications.show({
@@ -121,14 +125,13 @@ export const QueuePage = () => {
         }
 
         // Step 4/4: Execute the Stripe payment
-        const paymentResponse = await stripe.confirmPayment({
+        const { error: confirmError } = await stripe.confirmPayment({
             elements,
             clientSecret: stripeClientSecret,
             confirmParams: { return_url: window.location.href },
             redirect: 'if_required'
         });
-        console.log(paymentResponse);
-        if (paymentResponse.error) {
+        if (confirmError) {
             notifications.show({
                 id: 'boost-failed-on-confirm',
                 withCloseButton: true,
@@ -266,10 +269,10 @@ export const QueuePage = () => {
                                     setPauseButtonLoading(true);
                                     (async () => {
                                         if (!!queue.paused_on_utc) {
-                                            const updatedQueue = await unpauseQueue(queue.id);
+                                            const updatedQueue = await unpauseQueue(queue.id, context.visitorId);
                                             setQueue(updatedQueue);
                                         } else {
-                                            const updatedQueue = await pauseQueue(queue.id);
+                                            const updatedQueue = await pauseQueue(queue.id, context.visitorId);
                                             setQueue(updatedQueue);
                                         }
                                         setPauseButtonLoading(false);
@@ -289,7 +292,7 @@ export const QueuePage = () => {
                                 onClick={() => {
                                     setEndButtonLoading(true);
                                     (async () => {
-                                        await endQueue(queue.id);
+                                        await endQueue(queue.id, context.visitorId);
                                         navigate('/');
                                         setEndButtonLoading(false);
                                     })();
