@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
+import { notifications } from '@mantine/notifications';
 import { useOutletContext, useParams, useNavigate } from 'react-router-dom';
 import { fetchQueue, endQueue, pauseQueue, unpauseQueue, removeSongUpvote, upvoteSong, searchForSong, addSongToQueue, QUEUE_NOT_FOUND_ERROR_MSG, unsubscribeFromQueue, boostQueueSong } from '../services';
 import { Group, Avatar, Loader, Text, Input, ScrollArea, Stack, Image, Badge, Indicator, Button, Paper, ActionIcon, Center, PinInput, Modal } from '@mantine/core';
 import { IconSearch, IconThumbUp, IconPlayerPauseFilled, IconPlayerStopFilled, IconLock, IconX, IconArrowLeft, IconExplicit, IconCheck, IconRocket } from '@tabler/icons-react';
-import { ExpressCheckoutElement } from '@stripe/react-stripe-js';
+import { useStripe, useElements, ExpressCheckoutElement } from '@stripe/react-stripe-js';
 import spotifyLogo from '../assets/spotify-logo.png';
 
 const useDebounce = (value) => {
@@ -20,6 +21,8 @@ const useDebounce = (value) => {
 export const QueuePage = () => {
     const context = useOutletContext();
     const navigate = useNavigate();
+    const stripe = useStripe();
+    const elements = useElements();
     const { queueName } = useParams();
     const [queue, setQueue] = useState();
     const [queueLoaded, setQueueLoaded] = useState(false);
@@ -59,10 +62,79 @@ export const QueuePage = () => {
     };
 
     const onBoostReady = ({ availablePaymentMethods }) => {
-        if (!availablePaymentMethods) {
+        if (!availablePaymentMethods || !stripe) {
             setBoostUnavailable(true);
         }
         setBoostPaymentLoading(false);
+    };
+
+    const onBoostConfirm = async (event) => {
+        if (!stripe) {
+            notifications.show({
+                id: 'boost-failed-no-stripe',
+                withCloseButton: true,
+                autoClose: 5000,
+                title: 'Boost failed 🫠',
+                message: 'Stripe is not available.',
+                color: 'red'
+            });
+            setBoostModalOpen(false);
+            setBoostUnavailable(true);
+            return;
+        }
+
+        const { error: submitError } = await elements.submit();
+        if (!submitError) {
+            notifications.show({
+                id: 'boost-failed-on-submit',
+                withCloseButton: true,
+                autoClose: 5000,
+                title: 'Boost failed 🫠',
+                message: 'Your payment was rejected.',
+                color: 'red'
+            });
+            setBoostModalOpen(false);
+            setBoostUnavailable(true);
+            return;
+        }
+
+        let stripeClientSecret = '';
+        try {
+            const newQueue = await boostQueueSong(boostingQueueSong.id, context.visitorId);
+            setQueue(newQueue);
+            stripeClientSecret = newQueue.stripe_client_secret
+        } catch (error) {
+            notifications.show({
+                id: 'boost-failed-on-backend',
+                withCloseButton: true,
+                autoClose: 5000,
+                title: 'Boost failed 🫠',
+                message: 'Try again in a moment.',
+                color: 'red'
+            });
+            await fetchAndLoadQueue();
+            setBoostModalOpen(false);
+            return;
+        }
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            clientSecret: stripeClientSecret,
+            confirmParams: { return_url: window.location.href }
+        });
+        if (error) {
+            notifications.show({
+                id: 'boost-failed-on-confirm',
+                withCloseButton: true,
+                autoClose: 5000,
+                title: 'Boost failed 🫠',
+                message: 'Your payment was declined.',
+                color: 'red'
+            });
+            return;
+        }
+
+        setBoostModalOpen(false);
     };
 
     useEffect(() => {
@@ -96,19 +168,7 @@ export const QueuePage = () => {
                         <Text mb={4}>Pay $0.99 to play {boostingQueueSong?.name} by {boostingQueueSong?.artist} next?</Text>
                         <ExpressCheckoutElement
                             onReady={onBoostReady}
-                            onConfirm={() => {
-                                if (!boostingQueueSong) return;
-                                (async () => {
-                                    try {
-                                        const newQueue = await boostQueueSong(boostingQueueSong.id, context.visitorId);
-                                        setQueue(newQueue);
-                                    } catch (error) {
-                                        await fetchAndLoadQueue();
-                                    } finally {
-                                        setBoostModalOpen(false);
-                                    }
-                                })();
-                            }}
+                            onConfirm={onBoostConfirm}
                         />
                         {boostPaymentLoading && (
                             <Group position='center' grow noWrap>

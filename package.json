@@ -5,6 +5,7 @@
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^3.4.2",
     "@mantine/core": "^6.0.16",
+    "@mantine/notifications": "^6.0.19",
     "@stripe/react-stripe-js": "^2.1.2",
     "@stripe/stripe-js": "^2.0.0",
     "@tabler/icons-react": "^2.25.0",

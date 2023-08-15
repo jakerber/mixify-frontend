@@ -1,5 +1,6 @@
 import './App.css';
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { Notifications } from '@mantine/notifications';
 import { RootPage } from './pages/Root';
 import { HomePage } from './pages/Home';
 import { QueuePage } from './pages/Queue';
@@ -51,6 +52,7 @@ function App() {
       }}
     >
       <Elements stripe={stripePromise} options={stripeOptions}>
+        <Notifications />
         <RouterProvider router={router} />
       </Elements>
     </MantineProvider>
