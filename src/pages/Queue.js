@@ -401,7 +401,7 @@ export const QueuePage = () => {
                                                         </>
                                                     ) : (
                                                         <>
-                                                            {!boostUnavailable && !queue.paused_on_utc && (
+                                                            {!boostUnavailable && !queue.paused_on_utc && !!queue.currently_playing && (
                                                                 <ActionIcon
                                                                     size='lg'
                                                                     mr={-5}
