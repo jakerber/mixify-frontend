@@ -121,12 +121,14 @@ export const QueuePage = () => {
         }
 
         // Step 4/4: Execute the Stripe payment
-        const { error: confirmError } = await stripe.confirmPayment({
+        const paymentResponse = await stripe.confirmPayment({
             elements,
             clientSecret: stripeClientSecret,
-            confirmParams: { return_url: window.location.href }
+            confirmParams: { return_url: window.location.href },
+            redirect: 'if_required'
         });
-        if (confirmError) {
+        console.log(paymentResponse);
+        if (paymentResponse.error) {
             notifications.show({
                 id: 'boost-failed-on-confirm',
                 withCloseButton: true,
