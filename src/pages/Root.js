@@ -39,24 +39,21 @@ export const RootPage = () => {
                         <Image src={mixifyLogoZoom} radius='md' width={45} />
                         <Title order={2}>Mixify</Title>
                     </Group>
-                    {balance && (
-                        <Popover width={200} position='bottom-end' withArrow>
-                            <Popover.Target>
-                                <Button radius='xl' variant='gradient' size='sm' h={32} leftIcon={<IconFingerprint size={17} stroke={3} />}>
-                                    {!!visitorId ? visitorId.slice(0, 10) : `Loading...`}
-                                </Button>
-                            </Popover.Target>
+                    <Popover width={200} position='bottom-end' withArrow>
+                        <Popover.Target>
+                            <Button radius='xl' variant='gradient' size='sm' h={32} leftIcon={<IconFingerprint size={17} stroke={3} />}>
+                                {!!visitorId ? visitorId.slice(0, 10) : `Loading...`}
+                            </Button>
+                        </Popover.Target>
+                        {balance != null && (
                             <Popover.Dropdown>
                                 <Stack spacing={5}>
                                     <Title order={5}>Your balance</Title>
-                                    <Text size='lg'>{balance}</Text>
+                                    <Text size='lg'>{`$${balance}`}</Text>
                                 </Stack>
                             </Popover.Dropdown>
-                        </Popover>
-                    )}
-                    <Button radius='xl' variant='gradient' size='sm' h={32} leftIcon={<IconFingerprint size={17} stroke={3} />}>
-                        {!!visitorId ? visitorId.slice(0, 10) : `Loading...`}
-                    </Button>
+                        )}
+                    </Popover>
                 </Container>
             </Header>
             {!!visitorId && (

@@ -79,8 +79,8 @@ export const QueuePage = () => {
                 id: 'boost-failed-no-stripe',
                 withCloseButton: true,
                 autoClose: 5000,
-                title: 'Boost failed 🫠',
-                message: 'Your payment was declined (code #001).',
+                title: 'Boost failed',
+                message: 'Your payment was declined (code #001). 🫠',
                 color: 'red'
             });
             setBoostModalOpen(false);
@@ -95,8 +95,8 @@ export const QueuePage = () => {
                 id: 'boost-failed-on-submit',
                 withCloseButton: true,
                 autoClose: 5000,
-                title: 'Boost failed 🫠',
-                message: 'Your payment was declined (code #002).',
+                title: 'Boost failed',
+                message: 'Your payment was declined (code #002). 🫠',
                 color: 'red'
             });
             setBoostModalOpen(false);
@@ -115,8 +115,8 @@ export const QueuePage = () => {
                 id: 'boost-failed-on-create-intent',
                 withCloseButton: true,
                 autoClose: 5000,
-                title: 'Boost failed 🫠',
-                message: 'Your payment was declined (code #003).',
+                title: 'Boost failed',
+                message: 'Your payment was declined (code #003). 🫠',
                 color: 'red'
             });
             setBoostModalOpen(false);
@@ -136,8 +136,8 @@ export const QueuePage = () => {
                 id: 'boost-failed-on-confirm',
                 withCloseButton: true,
                 autoClose: 5000,
-                title: 'Boost failed 🫠',
-                message: 'Your payment was declined (code #004).',
+                title: 'Boost failed',
+                message: 'Your payment was declined (code #004). 🫠',
                 color: 'red'
             });
             setBoostModalOpen(false);
