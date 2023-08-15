@@ -61,3 +61,7 @@ export const unsubscribeFromQueue = async (queueId, fpjsVisitorId) => {
 export const boostQueueSong = async (queueSongId, fpjsVisitorId) => {
     return execRequest(`${API_URL_BASE}/v1/queue/boost/${queueSongId}/${fpjsVisitorId}`);
 };
+
+export const createBoostPayment = async (queueSongId, fpjsVisitorId) => {
+    return execRequest(`${API_URL_BASE}/v1/queue/boost/payment/${queueSongId}/${fpjsVisitorId}`);
+};

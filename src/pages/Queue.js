@@ -73,7 +73,7 @@ export const QueuePage = () => {
     const onBoostConfirm = async (event) => {
         if (!boostingQueueSong) return;
 
-        // Step 1/4: Verify Stripe is ready for payment
+        // Step 1/5: Verify Stripe is ready for payment
         if (!stripe) {
             notifications.show({
                 id: 'boost-failed-no-stripe',
@@ -88,7 +88,7 @@ export const QueuePage = () => {
             return;
         }
 
-        // Step 2/4: Submit the express checkout form
+        // Step 2/5: Submit the express checkout form
         const { error: submitError } = await elements.submit();
         if (submitError) {
             notifications.show({
@@ -104,12 +104,11 @@ export const QueuePage = () => {
             return;
         }
 
-        // Step 3/4: Create the Stripe payment on the backend and queue the song
+        // Step 3/5: Create the Stripe payment intent via the backend
         let stripeClientSecret = '';
         try {
-            const newQueue = await boostQueueSong(boostingQueueSong.id, context.visitorId);
-            setQueue(newQueue);
-            stripeClientSecret = newQueue.stripe_client_secret
+            const payment = await createBoostPayment(boostingQueueSong.id, context.visitorId);
+            stripeClientSecret = payment.stripe_client_secret
         } catch (error) {
             notifications.show({
                 id: 'boost-failed-on-create-intent',
@@ -124,7 +123,7 @@ export const QueuePage = () => {
             return;
         }
 
-        // Step 4/4: Execute the Stripe payment
+        // Step 4/5: Confirm the payment
         const { error: confirmError } = await stripe.confirmPayment({
             elements,
             clientSecret: stripeClientSecret,
@@ -138,6 +137,24 @@ export const QueuePage = () => {
                 autoClose: 5000,
                 title: 'Boost failed',
                 message: 'Your payment was declined (code #004). 🫠',
+                color: 'red'
+            });
+            setBoostModalOpen(false);
+            setBoostUnavailable(true);
+            return;
+        }
+
+        // Step 5/5: Boost the song
+        try {
+            const newQueue = await boostQueueSong(boostingQueueSong.id, context.visitorId);
+            setQueue(newQueue);
+        } catch (error) {
+            notifications.show({
+                id: 'boost-failed-on-backend-boost',
+                withCloseButton: true,
+                autoClose: 5000,
+                title: 'Boost failed',
+                message: 'Your payment was declined (code #005). 🫠',
                 color: 'red'
             });
             setBoostModalOpen(false);
