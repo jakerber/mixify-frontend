@@ -237,7 +237,7 @@ export const QueuePage = () => {
                             offset={4}
                             color='green'
                             withBorder
-                            disabled={!!queue.paused_on_utc}
+                            disabled={!!queue.paused_on_utc || !queue.currently_playing}
                             mb={10}
                         >
                             <Badge size='xl' p={18}>Queue {`${queue.name}`}</Badge>
