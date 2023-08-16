@@ -56,7 +56,7 @@ export const QueuePage = () => {
             const queue = await fetchQueue(queueName, context.visitorId);
             setQueue(queue);
             if (queue.started_by_fpjs_visitor_id === context.visitorId) {
-                context.setBalance(queue.balance);
+                context.setBalanceInfo(queue.balance_info);
             }
         } catch (error) {
             setQueueError(error.message);
@@ -151,7 +151,7 @@ export const QueuePage = () => {
             const newQueue = await boostQueueSong(boostingQueueSong.id, context.visitorId);
             setQueue(newQueue);
             if (newQueue.started_by_fpjs_visitor_id === context.visitorId) {
-                context.setBalance(newQueue.balance);
+                context.setBalanceInfo(newQueue.balance_info);
             }
         } catch (error) {
             notifications.show({

@@ -8,7 +8,7 @@ import mixifyLogoZoom from '../assets/mixify-logo-zoom.png';
 export const RootPage = () => {
     const navigate = useNavigate();
     const [visitorId, setVisitorId] = useState('');
-    const [balance, setBalance] = useState();
+    const [balanceInfo, setBalanceInfo] = useState();
     const headerHeight = rem(60);
 
     useEffect(() => {
@@ -45,11 +45,12 @@ export const RootPage = () => {
                                 {!!visitorId ? visitorId.slice(0, 10) : `Loading...`}
                             </Button>
                         </Popover.Target>
-                        {balance != null && (
+                        {balanceInfo != null && (
                             <Popover.Dropdown>
                                 <Stack spacing={5}>
                                     <Title order={5}>Your balance</Title>
-                                    <Text size='lg'>{`$${balance.toFixed(2)}`}</Text>
+                                    <Text size='lg'>{`$${balanceInfo.amount.toFixed(2)}`}</Text>
+                                    <Text size='sm' fs='italic' c='dimmed' inline>{`${balanceInfo.boost_count} song${balanceInfo.boost_count == 1 ? ' was' : 's were'} boosted in ${balanceInfo.queue_count} of your queues.`}</Text>
                                 </Stack>
                             </Popover.Dropdown>
                         )}
@@ -57,7 +58,7 @@ export const RootPage = () => {
                 </Container>
             </Header>
             {!!visitorId && (
-                <Outlet context={{ visitorId, setBalance }} />
+                <Outlet context={{ visitorId, setBalanceInfo }} />
             )}
         </div>
     );
