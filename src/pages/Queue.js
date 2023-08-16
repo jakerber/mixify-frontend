@@ -55,7 +55,9 @@ export const QueuePage = () => {
         try {
             const queue = await fetchQueue(queueName, context.visitorId);
             setQueue(queue);
-            context.setBalance(queue.balance);
+            if (queue.started_by_fpjs_visitor_id === context.visitorId) {
+                context.setBalance(queue.balance);
+            }
         } catch (error) {
             setQueueError(error.message);
         } finally {
