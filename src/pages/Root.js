@@ -49,7 +49,7 @@ export const RootPage = () => {
                             <Popover.Dropdown>
                                 <Stack spacing={5}>
                                     <Title order={5}>Your balance</Title>
-                                    <Text size='lg'>{`$${balance}`}</Text>
+                                    <Text size='lg'>{`$${balance.toFixed(2)}`}</Text>
                                 </Stack>
                             </Popover.Dropdown>
                         )}
