@@ -193,7 +193,7 @@ export const QueuePage = () => {
             <>
                 <Modal opened={boostModalOpen} onClose={() => setBoostModalOpen(false)} withCloseButton={false} centered>
                     <Stack spacing='xs'>
-                        <Text mb={4}>Pay $0.99 to play {boostingQueueSong?.name} by {boostingQueueSong?.artist} next?</Text>
+                        <Text mb={4}>Pay the host $0.99 to play {boostingQueueSong?.name} by {boostingQueueSong?.artist} next?</Text>
                         <ExpressCheckoutElement
                             onReady={onBoostReady}
                             onConfirm={onBoostConfirm}
