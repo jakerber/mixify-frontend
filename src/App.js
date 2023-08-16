@@ -11,7 +11,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
-const stripeOptions = { mode: 'payment', amount: 99, currency: 'usd' };
+const stripeOptions = { mode: 'payment', amount: process.env.REACT_APP_BOOST_COST_USD * 100, currency: 'usd' };
 
 function App() {
   const router = createBrowserRouter([

@@ -50,7 +50,7 @@ export const RootPage = () => {
                                 <Stack spacing={5}>
                                     <Title order={5}>Your balance</Title>
                                     <Text size='lg'>{`$${balanceInfo.amount.toFixed(2)}`}</Text>
-                                    <Text size='sm' fs='italic' c='dimmed' inline>{`${balanceInfo.boost_count} song${balanceInfo.boost_count == 1 ? ' was' : 's were'} boosted in ${balanceInfo.queue_count} of your queues.`}</Text>
+                                    <Text size='sm' fs='italic' c='dimmed' inline>{`${balanceInfo.boost_count} song${balanceInfo.boost_count === 1 ? ' was' : 's were'} boosted in ${balanceInfo.queue_count} of your queues.`}</Text>
                                 </Stack>
                             </Popover.Dropdown>
                         )}

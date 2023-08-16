@@ -198,8 +198,8 @@ export const QueuePage = () => {
             <>
                 <Modal opened={boostModalOpen} onClose={() => setBoostModalOpen(false)} withCloseButton={false} centered>
                     <Stack spacing='xs'>
-                        <Text mb={-5}>Pay $0.99 to play {boostingQueueSong?.name} by {boostingQueueSong?.artist} next?</Text>
-                        <Text mb={4} c='dimmed' size='sm'>50% of this payment will go to the host.</Text>
+                        <Text mb={-5}>Pay ${process.env.REACT_APP_BOOST_COST_USD} to play {boostingQueueSong?.name} by {boostingQueueSong?.artist} next?</Text>
+                        <Text mb={4} c='dimmed' size='sm'>{process.env.REACT_APP_BOOST_HOST_PAYOUT_PERCENT}% of this payment will go to the host.</Text>
                         <ExpressCheckoutElement
                             onReady={onBoostReady}
                             onConfirm={onBoostConfirm}
