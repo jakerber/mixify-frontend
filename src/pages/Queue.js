@@ -150,6 +150,9 @@ export const QueuePage = () => {
         try {
             const newQueue = await boostQueueSong(boostingQueueSong.id, context.visitorId);
             setQueue(newQueue);
+            if (newQueue.started_by_fpjs_visitor_id === context.visitorId) {
+                context.setBalance(newQueue.balance);
+            }
         } catch (error) {
             notifications.show({
                 id: 'boost-failed-on-backend-boost',
