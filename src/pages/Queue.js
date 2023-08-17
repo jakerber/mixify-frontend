@@ -436,7 +436,7 @@ export const QueuePage = () => {
                             </>
                         )
                     }
-                    {queue.currently_playing && (
+                    {queue.currently_playing && !queue.paused_on_utc && (
                         <>
                             <Text size='sm' mt={6} mb={-1}>Now</Text>
                             <Paper
