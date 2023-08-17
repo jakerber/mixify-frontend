@@ -502,7 +502,7 @@ export const QueuePage = () => {
                             })}
                         </>
                     )}
-                    <Text size='sm' mt={6}>Vote</Text>
+                    <Text size='sm' mt={6} mb={-1}>Vote</Text>
                     {
                         queue.queued_songs.filter((song) => !song.added_to_spotify_queue_on_utc).length > 0 ? (
                             <>
