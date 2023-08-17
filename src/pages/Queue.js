@@ -486,7 +486,7 @@ export const QueuePage = () => {
                                                 </div>
                                             </Group>
                                             {song.boosted === true && (
-                                                <Group noWrap pr={10} spacing={5}>
+                                                <Group noWrap pr={11} spacing={5}>
                                                     <ActionIcon
                                                         size='lg'
                                                         color='yellow'
