@@ -178,7 +178,6 @@ export const QueuePage = () => {
         }
 
         setBoostModalOpen(false);
-        setBoostPaymentLoading(false);
         window.location.reload();  // bug where queue is wrong after boost
     };
 
