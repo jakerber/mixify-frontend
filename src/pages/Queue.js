@@ -230,7 +230,7 @@ export const QueuePage = () => {
                         {boostUnavailable && (
                             <Text fs='italic' c='dimmed' mt={-10}>No payment methods available</Text>
                         )}
-                        <Group spacing={15}>
+                        <Group spacing={15} grow>
                             <Button
                                 mt={10}
                                 leftIcon={<IconArrowLeft />}
