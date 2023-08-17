@@ -51,6 +51,14 @@ export const QueuePage = () => {
     spotifyAuthUrl += `&response_type=token&show_dialogue=true`;
     spotifyAuthUrl += `&scope=user-modify-playback-state`;
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!boostModalOpen) fetchAndLoadQueue();
+        }, parseInt(process.env.REACT_APP_AUTO_REFRESH_INTERVAL_SECS) * 1000);
+
+        return () => clearInterval(interval);
+    }, [])
+
     const fetchAndLoadQueue = async () => {
         try {
             const queue = await fetchQueue(queueName, context.visitorId);
@@ -446,11 +454,52 @@ export const QueuePage = () => {
                             </Paper>
                         </>
                     )}
-                    <Text size='sm' mt={8}>Next up</Text>
+                    {queue.queued_songs.filter((song) => !!song.added_to_spotify_queue_on_utc).length > 0 && (
+                        <>
+                            <Text size='sm' mt={6} mb={-1}>Queued</Text>
+                            {queue.queued_songs.filter((song) => !!song.added_to_spotify_queue_on_utc).map((song, index) => {
+                                return (
+                                    <Paper
+                                        key={`locked-song-${index}`}
+                                        shadow='xs'
+                                        p='xs'
+                                        sx={{ backgroundColor: '#2b2c3d' }}
+                                        withBorder
+                                        mb={2}
+                                    >
+                                        <Group position='apart' noWrap>
+                                            <Group noWrap>
+                                                <Avatar src={song.album_cover_url} />
+
+                                                <div>
+                                                    <Text size='sm'>{song.name}</Text>
+                                                    <Text size='xs' opacity={0.65}>
+                                                        {song.artist}
+                                                    </Text>
+                                                </div>
+                                            </Group>
+                                            {song.boosted === true && (
+                                                <Group noWrap pr={10} spacing={5}>
+                                                    <ActionIcon
+                                                        size='lg'
+                                                        color='yellow'
+                                                        variant='light'
+                                                    >
+                                                        <IconRocket size={25} stroke={1} />
+                                                    </ActionIcon>
+                                                </Group>
+                                            )}
+                                        </Group>
+                                    </Paper>
+                                );
+                            })}
+                        </>
+                    )}
+                    <Text size='sm' mt={6}>Vote</Text>
                     {
-                        queue.queued_songs.length > 0 ? (
+                        queue.queued_songs.filter((song) => !song.added_to_spotify_queue_on_utc).length > 0 ? (
                             <>
-                                {queue.queued_songs.map((song, index) => {
+                                {queue.queued_songs.filter((song) => !song.added_to_spotify_queue_on_utc).map((song, index) => {
                                     const songUpvotedByUser = song.upvotes.find(upvotedById => upvotedById === context.visitorId);
                                     return (
                                         <Paper
@@ -473,99 +522,77 @@ export const QueuePage = () => {
                                                     </div>
                                                 </Group>
                                                 <Group noWrap pr={10} spacing={5}>
-                                                    {!!song.added_to_spotify_queue_on_utc ? (
-                                                        <>
-                                                            {song.boosted === true && (
-                                                                <ActionIcon
-                                                                    size='lg'
-                                                                    color='yellow'
-                                                                    variant='light'
-                                                                >
-                                                                    <IconRocket size={25} stroke={1} />
-                                                                </ActionIcon>
-                                                            )}
+                                                    <>
+                                                        {!boostUnavailable && !queue.paused_on_utc && !!queue.currently_playing && (
                                                             <ActionIcon
                                                                 size='lg'
-                                                                color='yellow'
-                                                                variant='light'
-                                                                mr={-1}
+                                                                mr={-5}
+                                                                onClick={() => {
+                                                                    setBoostingQueueSong(song);
+                                                                    setBoostPaymentLoading(true);
+                                                                    setBoostModalOpen(true);
+                                                                }}
                                                             >
-                                                                <IconLock size={25} stroke={1} />
+                                                                {boostModalOpen && boostingQueueSong?.id === song.id ? (
+                                                                    <Loader size='xs' />
+                                                                ) : (
+                                                                    <IconRocket size={25} stroke={1} />
+                                                                )}
                                                             </ActionIcon>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            {!boostUnavailable && !queue.paused_on_utc && !!queue.currently_playing && (
-                                                                <ActionIcon
-                                                                    size='lg'
-                                                                    mr={-5}
-                                                                    onClick={() => {
-                                                                        setBoostingQueueSong(song);
-                                                                        setBoostPaymentLoading(true);
-                                                                        setBoostModalOpen(true);
-                                                                    }}
-                                                                >
-                                                                    {boostModalOpen && boostingQueueSong?.id === song.id ? (
+                                                        )}
+                                                        {songUpvotedByUser ? (
+                                                            <ActionIcon
+                                                                size='lg'
+                                                                color='green'
+                                                                variant='light'
+                                                                onClick={() => {
+                                                                    setUpvotingQueueSongId(song.id);
+                                                                    (async () => {
+                                                                        try {
+                                                                            const newQueue = await removeSongUpvote(song.id, context.visitorId);
+                                                                            setQueue(newQueue);
+                                                                        } catch (error) {
+                                                                            await fetchAndLoadQueue();
+                                                                        }
+                                                                        setUpvotingQueueSongId('');
+                                                                    })();
+                                                                }}
+                                                            >
+                                                                <>
+                                                                    {upvotingQueueSongId === song.id ? (
                                                                         <Loader size='xs' />
                                                                     ) : (
-                                                                        <IconRocket size={25} stroke={1} />
+                                                                        <IconThumbUp size={25} stroke={1} />
                                                                     )}
-                                                                </ActionIcon>
-                                                            )}
-                                                            {songUpvotedByUser ? (
-                                                                <ActionIcon
-                                                                    size='lg'
-                                                                    color='green'
-                                                                    variant='light'
-                                                                    onClick={() => {
+                                                                </>
+                                                            </ActionIcon>
+                                                        ) : (
+                                                            <ActionIcon
+                                                                size='lg'
+                                                                onClick={() => {
+                                                                    (async () => {
                                                                         setUpvotingQueueSongId(song.id);
-                                                                        (async () => {
-                                                                            try {
-                                                                                const newQueue = await removeSongUpvote(song.id, context.visitorId);
-                                                                                setQueue(newQueue);
-                                                                            } catch (error) {
-                                                                                await fetchAndLoadQueue();
-                                                                            }
-                                                                            setUpvotingQueueSongId('');
-                                                                        })();
-                                                                    }}
-                                                                >
-                                                                    <>
-                                                                        {upvotingQueueSongId === song.id ? (
-                                                                            <Loader size='xs' />
-                                                                        ) : (
-                                                                            <IconThumbUp size={25} stroke={1} />
-                                                                        )}
-                                                                    </>
-                                                                </ActionIcon>
-                                                            ) : (
-                                                                <ActionIcon
-                                                                    size='lg'
-                                                                    onClick={() => {
-                                                                        (async () => {
-                                                                            setUpvotingQueueSongId(song.id);
-                                                                            try {
-                                                                                const newQueue = await upvoteSong(song.id, context.visitorId);
-                                                                                setQueue(newQueue);
-                                                                            } catch (error) {
-                                                                                await fetchAndLoadQueue();
-                                                                            }
-                                                                            setUpvotingQueueSongId('');
-                                                                        })();
-                                                                    }}
-                                                                >
-                                                                    <>
-                                                                        {upvotingQueueSongId === song.id ? (
-                                                                            <Loader size='xs' />
-                                                                        ) : (
-                                                                            <IconThumbUp size={25} stroke={1} />
-                                                                        )}
-                                                                    </>
-                                                                </ActionIcon>
-                                                            )}
-                                                            <Text miw={10}>{song.upvotes.length}</Text>
-                                                        </>
-                                                    )}
+                                                                        try {
+                                                                            const newQueue = await upvoteSong(song.id, context.visitorId);
+                                                                            setQueue(newQueue);
+                                                                        } catch (error) {
+                                                                            await fetchAndLoadQueue();
+                                                                        }
+                                                                        setUpvotingQueueSongId('');
+                                                                    })();
+                                                                }}
+                                                            >
+                                                                <>
+                                                                    {upvotingQueueSongId === song.id ? (
+                                                                        <Loader size='xs' />
+                                                                    ) : (
+                                                                        <IconThumbUp size={25} stroke={1} />
+                                                                    )}
+                                                                </>
+                                                            </ActionIcon>
+                                                        )}
+                                                        <Text miw={10}>{song.upvotes.length}</Text>
+                                                    </>
                                                 </Group>
                                             </Group>
                                         </Paper>
