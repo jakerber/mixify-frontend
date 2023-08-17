@@ -59,7 +59,7 @@ export const HomePage = () => {
             >
                 <Stack spacing={0}>
                     <Title order={4}>Join</Title>
-                    <Text size='xs'>Enter the 6 digit queue name</Text>
+                    <Text size='xs'>Enter the 6 digit room name</Text>
                     <Space h={15} />
                     <Center mb={5}>
                         <PinInput

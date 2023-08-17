@@ -248,7 +248,7 @@ export const QueuePage = () => {
                             disabled={!!queue.paused_on_utc || !queue.currently_playing}
                             mb={10}
                         >
-                            <Badge size='xl' p={18}>Queue {`${queue.name}`}</Badge>
+                            <Badge size='xl' p={18}>Room {`${queue.name}`}</Badge>
                         </Indicator>
                         {!isQueueOwner && (
                             <Button
