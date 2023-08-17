@@ -176,6 +176,7 @@ export const QueuePage = () => {
         }
 
         setBoostModalOpen(false);
+        window.location.reload();  // bug where queue is wrong after boost
     };
 
     useEffect(() => {
