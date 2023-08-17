@@ -199,7 +199,7 @@ export const QueuePage = () => {
         })();
     }, [debouncedSearchQuery]);
 
-    window.document.title = 'Mixify – Queue';
+    window.document.title = 'Mixify – Room';
     const isQueueOwner = !!queue && queue.started_by_fpjs_visitor_id === context.visitorId;
     const isQueueSubscriber = !!queue && queue.subscribers.find(subscriber => subscriber.fpjs_visitor_id === context.visitorId);
     return queueLoaded ? (
@@ -232,7 +232,7 @@ export const QueuePage = () => {
                                     setBoostModalOpen(false);
                                 }}
                             >
-                                Back to queue
+                                Back to room
                             </Button>
                         </div>
                     </Stack>
@@ -607,7 +607,7 @@ export const QueuePage = () => {
                                 sx={{ backgroundColor: '#2b2c3d' }}
                                 withBorder
                             >
-                                <Text size='sm' opacity={0.65}>Queue is empty</Text>
+                                <Text size='sm' opacity={0.65}>No songs to show</Text>
                             </Paper>
                         )
                     }
@@ -626,7 +626,7 @@ export const QueuePage = () => {
                         <>
                             {queueError.includes(QUEUE_NOT_FOUND_ERROR_MSG) ? (
                                 <Stack mb={10}>
-                                    <Text size='sm'>{`Hmm, we couldn't find this queue. Try entering the name again below.`}</Text>
+                                    <Text size='sm'>{`Hmm, we couldn't find this room. Try entering the name again below.`}</Text>
                                     <Center>
                                         <PinInput
                                             size='md'
@@ -673,7 +673,7 @@ export const QueuePage = () => {
         >
             <Center>
                 <Stack align='center' spacing={10}>
-                    <Text size='sm'>Loading queue</Text>
+                    <Text size='sm'>Loading room</Text>
                     <Loader />
                 </Stack>
             </Center>
