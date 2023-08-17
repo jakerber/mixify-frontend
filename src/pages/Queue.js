@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { notifications } from '@mantine/notifications';
 import { useOutletContext, useParams, useNavigate } from 'react-router-dom';
 import { fetchQueue, endQueue, pauseQueue, unpauseQueue, removeSongUpvote, upvoteSong, searchForSong, addSongToQueue, QUEUE_NOT_FOUND_ERROR_MSG, unsubscribeFromQueue, boostQueueSong, createBoostPayment } from '../services';
-import { Group, Avatar, Loader, Text, Input, ScrollArea, Stack, Image, Badge, Indicator, Button, Paper, ActionIcon, Center, PinInput, Modal } from '@mantine/core';
-import { IconSearch, IconThumbUp, IconPlayerPauseFilled, IconPlayerStopFilled, IconLock, IconX, IconArrowLeft, IconExplicit, IconCheck, IconRocket } from '@tabler/icons-react';
+import { Group, Avatar, Loader, Text, Input, ScrollArea, Stack, Image, Badge, Indicator, Button, Paper, ActionIcon, Center, PinInput, Modal, LoadingOverlay } from '@mantine/core';
+import { IconSearch, IconThumbUp, IconPlayerPauseFilled, IconPlayerStopFilled, IconX, IconArrowLeft, IconExplicit, IconCheck, IconRocket } from '@tabler/icons-react';
 import { useStripe, useElements, ExpressCheckoutElement } from '@stripe/react-stripe-js';
 import spotifyLogo from '../assets/spotify-logo.png';
 
@@ -40,6 +40,7 @@ export const QueuePage = () => {
 
     const [boostModalOpen, setBoostModalOpen] = useState(false);
     const [boostingQueueSong, setBoostingQueueSong] = useState();
+    const [boostCheckoutLoading, setBoostCheckoutLoading] = useState(false);
     const [boostPaymentLoading, setBoostPaymentLoading] = useState(false);
     const [boostUnavailable, setBoostUnavailable] = useState(false);
 
@@ -77,11 +78,12 @@ export const QueuePage = () => {
         if (!availablePaymentMethods || !stripe) {
             setBoostUnavailable(true);
         }
-        setBoostPaymentLoading(false);
+        setBoostCheckoutLoading(false);
     };
 
     const onBoostConfirm = async (event) => {
         if (!boostingQueueSong) return;
+        setBoostPaymentLoading(true);
 
         // Step 1/5: Verify Stripe is ready for payment
         if (!stripe) {
@@ -176,6 +178,7 @@ export const QueuePage = () => {
         }
 
         setBoostModalOpen(false);
+        setBoostPaymentLoading(false);
         window.location.reload();  // bug where queue is wrong after boost
     };
 
@@ -206,6 +209,7 @@ export const QueuePage = () => {
         !!queue ? (
             <>
                 <Modal opened={boostModalOpen} onClose={() => setBoostModalOpen(false)} withCloseButton={false} centered>
+                    <LoadingOverlay visible={boostPaymentLoading} overlayBlur={3} />
                     <Stack spacing='xs'>
                         <Text mb={-5}>Pay ${process.env.REACT_APP_BOOST_COST_USD} to queue this song now.</Text>
                         <Text mb={4} c='dimmed' size='sm'>{process.env.REACT_APP_BOOST_HOST_PAYOUT_PERCENT}% of this payment will go to the host.</Text>
@@ -213,7 +217,7 @@ export const QueuePage = () => {
                             onReady={onBoostReady}
                             onConfirm={onBoostConfirm}
                         />
-                        {boostPaymentLoading && (
+                        {boostCheckoutLoading && (
                             <Group position='center' grow noWrap>
                                 <Loader mt={-6} size='md' />
                             </Group>
@@ -532,7 +536,7 @@ export const QueuePage = () => {
                                                                 mr={-5}
                                                                 onClick={() => {
                                                                     setBoostingQueueSong(song);
-                                                                    setBoostPaymentLoading(true);
+                                                                    setBoostCheckoutLoading(true);
                                                                     setBoostModalOpen(true);
                                                                 }}
                                                             >
