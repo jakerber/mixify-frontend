@@ -44,6 +44,9 @@ export const QueuePage = () => {
     const [boostPaymentLoading, setBoostPaymentLoading] = useState(false);
     const [boostUnavailable, setBoostUnavailable] = useState(false);
 
+    const [confirmEndModalOpen, setConfirmEndModalOpen] = useState(false);
+    const [confirmEndLoading, setConfirmEndLoading] = useState(false);
+
     const [anotherQueueName, setAnotherQueueName] = useState('');
 
     let spotifyAuthUrl = `https://accounts.spotify.com/authorize?`;
@@ -207,6 +210,61 @@ export const QueuePage = () => {
     return queueLoaded ? (
         !!queue ? (
             <>
+                <Modal
+                    opened={confirmEndModalOpen}
+                    onClose={() => {
+                        setConfirmEndModalOpen(false);
+                        setEndButtonLoading(false);
+                    }}
+                    withCloseButton={false}
+                    centered>
+                    <LoadingOverlay visible={confirmEndLoading} overlayBlur={3} />
+                    <Stack spacing='xs'>
+                        <Text mb={-5}>End this room?</Text>
+                        <Text mb={-5} c='dimmed' size='sm'>All room information, including songs and upvotes, will be lost.</Text>
+                        {boostCheckoutLoading && (
+                            <Group position='center' grow noWrap>
+                                <Loader mt={-6} size='md' />
+                            </Group>
+                        )}
+                        {boostUnavailable && (
+                            <Text fs='italic' c='dimmed' mt={-10}>No payment methods available</Text>
+                        )}
+                        <Group spacing={15}>
+                            <Button
+                                mt={10}
+                                leftIcon={<IconArrowLeft />}
+                                radius='xl'
+                                size='xs'
+                                variant='gradient'
+                                onClick={() => {
+                                    setConfirmEndModalOpen(false);
+                                    setEndButtonLoading(false);
+                                }}
+                            >
+                                Back to room
+                            </Button>
+                            <Button
+                                mt={10}
+                                radius='xl'
+                                size='xs'
+                                variant='gradient'
+                                gradient={{ from: 'orange', to: 'red' }}
+                                onClick={() => {
+                                    setConfirmEndLoading(true);
+                                    (async () => {
+                                        await endQueue(queue.id, context.visitorId);
+                                        navigate('/');
+                                        setEndButtonLoading(false);
+                                        setConfirmEndLoading(false);
+                                    })();
+                                }}
+                            >
+                                End room
+                            </Button>
+                        </Group>
+                    </Stack>
+                </Modal>
                 <Modal opened={boostModalOpen} onClose={() => setBoostModalOpen(false)} withCloseButton={false} centered>
                     <LoadingOverlay visible={boostPaymentLoading} overlayBlur={3} />
                     <Stack spacing='xs'>
@@ -256,7 +314,7 @@ export const QueuePage = () => {
                                 Room {`${queue.name.toUpperCase()}`}
                             </Badge>
                         </Indicator>
-                        {!isQueueOwner && (
+                        {/* {!isQueueOwner && (
                             <Button
                                 color='dark'
                                 radius='xl'
@@ -292,7 +350,7 @@ export const QueuePage = () => {
                                     </Group>
                                 )}
                             </Button>
-                        )}
+                        )} */}
                     </Group>
                     {isQueueOwner && (
                         <Group mb={10}>
@@ -328,11 +386,7 @@ export const QueuePage = () => {
                                 loading={endButtonLoading}
                                 onClick={() => {
                                     setEndButtonLoading(true);
-                                    (async () => {
-                                        await endQueue(queue.id, context.visitorId);
-                                        navigate('/');
-                                        setEndButtonLoading(false);
-                                    })();
+                                    setConfirmEndModalOpen(true);
                                 }}
                                 leftIcon={<IconPlayerStopFilled size={20} stroke={1} />}
                                 styles={{ leftIcon: { marginRight: 5 } }}
