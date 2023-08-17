@@ -533,7 +533,7 @@ export const QueuePage = () => {
                                                         {!boostUnavailable && !queue.paused_on_utc && !!queue.currently_playing && (
                                                             <ActionIcon
                                                                 size='lg'
-                                                                mr={-5}
+                                                                mr={-6}
                                                                 onClick={() => {
                                                                     setBoostingQueueSong(song);
                                                                     setBoostCheckoutLoading(true);
